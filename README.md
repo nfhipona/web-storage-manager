@@ -1,12 +1,12 @@
 # Web Storage Manager
 
-[![npm version]][npm_url]
+Web utility storage manager to handle save, update and data purge
 
 [npm_url]: https://www.npmjs.com/package/web-storage-manager
 
 ## Demo
 
-[Demo Page](https://www.npmjs.com/package/web-storage-manager-example)
+[Demo Page](https://github.com/nferocious76/web-storage-manager-example)
 
 ## Installation
 
@@ -20,11 +20,15 @@ npm install web-storage-manager --save
 
 import Storage from 'web-storage-manager';
 
+// update item on key path of previously saved data
 const keyPaths = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis']
 const keyPaths2 = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis2']
 
 Storage.updateItemInItem('test-sample-parent-key', keyPaths, valueInObj, 'id')
 Storage.updateItemInItem('test-sample-parent-key', keyPaths2, valueInObj)
+
+// append item
+Storage.appendItem('test-sample', { new_item : { desc: 'new test item' } })
 
 ```
 
@@ -142,3 +146,15 @@ removeMultiple(keys) [ 'key1', 'key2' ]
 purge() // remove all saved data under active domain
 
 ```
+
+
+## Contribute
+We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
+
+### About
+
+This project was inpired by 'react-persist' that lacks feature.
+
+## License
+
+AutoCompleteTextField is available under the MIT license. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
