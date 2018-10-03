@@ -1,0 +1,24 @@
+{
+  "name": "web-storage-manager",
+  "version": "1.0.0",
+  "description": "Web utility storage manager to handle save, update and data purge",
+  "main": "src/web-storage-manager.js",
+  "scripts": {
+    "test": "jest --env=jsdom"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nferocious76/web-storage-manager.git"
+  },
+  "keywords": [
+    "react",
+    "local",
+    "storage"
+  ],
+  "author": "Neil Francis Ramirez Hipona",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nferocious76/web-storage-manager/issues"
+  },
+  "homepage": "https://github.com/nferocious76/web-storage-manager#readme"
+}
