@@ -4,7 +4,9 @@
   "description": "Web utility storage manager to handle save, update and data purge",
   "main": "src/web-storage-manager.js",
   "scripts": {
-    "test": "jest --env=jsdom"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack --watch",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -13,7 +15,9 @@
   "keywords": [
     "react",
     "local",
-    "storage"
+    "storage",
+    "local storage",
+    "web storage"
   ],
   "author": "Neil Francis Ramirez Hipona",
   "license": "MIT",

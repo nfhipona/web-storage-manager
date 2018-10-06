@@ -1,5 +1,3 @@
-'use strict';
-
 const storage = window.localStorage
 
 exports.storage = () => {
@@ -9,7 +7,7 @@ exports.storage = () => {
 /**
  *
  * @param {string} key - data key
- * @param {string} value - data value
+ * @param {*} value - data value
  *
  */
 exports.setItem = (key, value) => {
@@ -27,7 +25,7 @@ exports.setItem = (key, value) => {
  * @param {Object[]} items - collection
  * @param {Object} items[].item - item object
  * @param {string} items[].item.key - data key
- * @param {string} items[].item.value - data value
+ * @param {*} items[].item.value - data value
  *
  */
 exports.setMultiple = (items) => {
@@ -46,24 +44,54 @@ exports.setMultiple = (items) => {
 /**
  *
  * @param {string} key - data key
- * @param {string} value - data value
+ * @param {*} value - data value
  *
  */
 exports.appendItem = (key, value) => {
 
     try {
         const oldData = this.getItem(key)
-        const newData = {
-            ...oldData,
-            ...value
-        }
 
+        let newData = this.combineObject(value, oldData);
         this.setItem(key, newData)
 
         return true
     } catch (error) {
         return false
     }
+}
+
+/**
+ *
+ * @param {Object} object - object to combine
+ * @param {Object} toObject - object to combine to
+ *
+ */
+exports.combineObject = (object, toObject) => {
+
+    for (const key in object) {
+        toObject[key] = object[key]
+    }
+
+    return toObject
+}
+
+/**
+ *
+ * @param {Object[]} collection - collection of objects
+ * @param {Object} object - object to find index from the collection
+ * @param {string} attr - attribute of the object to compare to
+ *
+ */
+exports.indexOfObject = (collection, object, attr) => {
+
+    for (let i = 0; i < collection.length; i++) {
+        if (collection[i][attr] === object[attr]) {
+            return i
+        }
+    }
+
+    return -1
 }
 
 /**
@@ -92,7 +120,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     collection = value // replace with new value
                 }else{
                     // collection
-                    const idx = indexOfObject(collection, value, attrCompare)
+                    const idx = attrCompare ? this.indexOfObject(collection, value, attrCompare) : -1
 
                     // append or replace object at index
                     if (idx >= 0) {
@@ -132,21 +160,15 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = { [key]: data } // set initial value
                 }else{
 
-                    // update with old data + new data
+                    // update with old data + new data                    
                     newCollection = {
-                        [key]: {
-                            ...data,
-                            ...newCollection
-                        }
+                        [key]: objSelf.combineObject(newCollection, data)
                     }
                 }
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = {
-                        ...oldCollection,
-                        ...newCollection,
-                    }
+                    newCollection = objSelf.combineObject(newCollection, oldCollection)
 
                     // save and update local
                     objSelf.setItem(parentKey, newCollection)
@@ -156,23 +178,13 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
             }
         }
 
-        // Collection ~ Ojbect ~ attribute
-        function indexOfObject(collection, object, attr) {
-
-            for (let i = 0; i < collection.length; i++) {
-                if (collection[i][attr] === object[attr]) {
-                    return i
-                }
-            }
-
-            return -1
-        }
-
     } catch (error) {
         return false
     }
 
 }
+
+
 
 /**
  *
