@@ -153,7 +153,7 @@ We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](
 
 ### About
 
-This project was inpired by 'react-persist' that lacks feature.
+This project was inpired by 'react-persist' that was discontinued.
 
 ## License
 
