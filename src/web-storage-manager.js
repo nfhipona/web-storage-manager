@@ -160,7 +160,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = { [key]: data } // set initial value
                 }else{
 
-                    // update with old data + new data                    
+                    // update with old data + new data
                     newCollection = {
                         [key]: objSelf.combineObject(newCollection, data)
                     }
@@ -232,7 +232,7 @@ exports.getMultiple = (keys) => {
  * @param {string} key - key name of your saved data
  *
  */
-removeItem = (key) => {
+exports.removeItem = (key) => {
 
     try {
         storage.removeItem(key)
@@ -247,7 +247,7 @@ removeItem = (key) => {
  * @param {string[]} keys - key names of your saved data
  *
  */
-removeMultiple = (keys) => {
+exports.removeMultiple = (keys) => {
 
     try {
         for (const key of keys) {
@@ -265,7 +265,7 @@ removeMultiple = (keys) => {
  * will purge all saved data under this domain
  *
  */
-purge = () => {
+exports.purge = () => {
 
     try {
         storage.clear()
