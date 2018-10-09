@@ -3,3 +3,9 @@
 /.babelrc
 /.gitignore
 /.travis.yml
+
+webpack.config.js
+babel.config.js
+
+# dependencies
+/node_modules
