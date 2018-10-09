@@ -157,4 +157,4 @@ This project was inpired by 'react-persist' that was discontinued.
 
 ## License
 
-AutoCompleteTextField is available under the MIT license. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
+`Web Storage Manager` is available under the MIT license. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
