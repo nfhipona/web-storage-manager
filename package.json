@@ -2,7 +2,7 @@
   "name": "web-storage-manager",
   "version": "1.0.5",
   "description": "Web utility storage manager to handle save, update and data purge",
-  "main": "src/web-storage-manager.js",
+  "main": "lib/web-storage-manager.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",
@@ -24,5 +24,13 @@
   "bugs": {
     "url": "https://github.com/nferocious76/web-storage-manager/issues"
   },
-  "homepage": "https://github.com/nferocious76/web-storage-manager#readme"
+  "homepage": "https://github.com/nferocious76/web-storage-manager#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.0.0"
+  }
 }

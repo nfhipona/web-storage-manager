@@ -1,7 +1,7 @@
 const storage = window.localStorage
 
 exports.storage = () => {
-    storage
+    return storage
 }
 
 /**
