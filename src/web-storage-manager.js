@@ -16,7 +16,7 @@ exports.setItem = (key, value) => {
         storage.setItem(key, JSON.stringify(value))
         return true
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -30,12 +30,10 @@ exports.setEncodeItem = (key, value) => {
 
     try {
         const encoded = this.encode(value)
-        console.log('encoded: ', encoded)
         storage.setItem(key, encoded)
         return true
     } catch (error) {
-        console.log('encoded error: ', error)
-        throw new Error('Unable to encode and save data')
+        throw error
     }
 }
 
@@ -56,7 +54,7 @@ exports.setMultiple = (items) => {
 
         return true
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -78,8 +76,7 @@ exports.setEncodeMultiple = (items) => {
 
         return true
     } catch (error) {
-        console.log('encoded error: ', error)
-        return false
+        throw error
     }
 }
 
@@ -97,7 +94,7 @@ exports.appendItem = (key, value) => {
 
         return this.setItem(key, newData)
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -115,8 +112,7 @@ exports.appendEncodeItem = (key, value) => {
 
         return this.setEncodeItem(key, newData)
     } catch (error) {
-        console.log('encoded error: ', error)
-        return false
+        throw error
     }
 }
 
@@ -236,7 +232,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
         }
 
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -323,8 +319,7 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
         }
 
     } catch (error) {
-        console.log('encoded error: ', error)
-        return false
+        throw error
     }
 }
 
@@ -340,7 +335,7 @@ exports.getItem = (key) => {
         return JSON.parse(data)
 
     } catch (error) {
-        return null
+        throw error
     }
 }
 
@@ -358,8 +353,7 @@ exports.getEncodeItem = (key) => {
         return decoded
 
     } catch (error) {
-        console.log('encoded error: ', error)
-        return null
+        throw error
     }
 }
 
@@ -384,8 +378,7 @@ exports.getMultiple = (keys) => {
 
         return items
     } catch (error) {
-        console.log('encoded error: ', error)
-        return null
+        throw error
     }
 }
 
@@ -410,8 +403,7 @@ exports.getEncodeMultiple = (keys) => {
 
         return items
     } catch (error) {
-        console.log('encoded error: ', error)
-        return null
+        throw error
     }
 }
 
@@ -426,7 +418,7 @@ exports.removeItem = (key) => {
         storage.removeItem(key)
         return true
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -444,7 +436,7 @@ exports.removeMultiple = (keys) => {
 
         return true
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -459,7 +451,7 @@ exports.purge = () => {
         storage.clear()
         return true
     } catch (error) {
-        return false
+        throw error
     }
 }
 
@@ -473,6 +465,7 @@ exports.encode = (obj) => {
     const rawStr = JSON.stringify(obj)
     const encObj = window.btoa(rawStr)
 
+    // console.log('encoded: ', encObj)
     return encObj
 }
 
@@ -486,5 +479,6 @@ exports.decode = (encObj) => {
     const decoded = window.atob(encObj)
     const obj = JSON.parse(decoded)
 
+    // console.log('decoded: ', encObj)
     return obj
 }
