@@ -30,10 +30,12 @@ exports.setEncodeItem = (key, value) => {
 
     try {
         const encoded = this.encode(value)
+        console.log('encoded: ', encoded)
         storage.setItem(key, encoded)
         return true
     } catch (error) {
-        return false
+        console.log('encoded error: ', error)
+        throw new Error('Unable to encode and save data')
     }
 }
 
@@ -76,6 +78,7 @@ exports.setEncodeMultiple = (items) => {
 
         return true
     } catch (error) {
+        console.log('encoded error: ', error)
         return false
     }
 }
@@ -112,6 +115,7 @@ exports.appendEncodeItem = (key, value) => {
 
         return this.setEncodeItem(key, newData)
     } catch (error) {
+        console.log('encoded error: ', error)
         return false
     }
 }
@@ -319,6 +323,7 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
         }
 
     } catch (error) {
+        console.log('encoded error: ', error)
         return false
     }
 }
@@ -353,6 +358,7 @@ exports.getEncodeItem = (key) => {
         return decoded
 
     } catch (error) {
+        console.log('encoded error: ', error)
         return null
     }
 }
@@ -378,6 +384,7 @@ exports.getMultiple = (keys) => {
 
         return items
     } catch (error) {
+        console.log('encoded error: ', error)
         return null
     }
 }
@@ -403,6 +410,7 @@ exports.getEncodeMultiple = (keys) => {
 
         return items
     } catch (error) {
+        console.log('encoded error: ', error)
         return null
     }
 }

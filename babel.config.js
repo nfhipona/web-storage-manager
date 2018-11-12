@@ -13,4 +13,11 @@ const presets = [
     ],
   ];
 
-  module.exports = { presets };
+  const overrides = [
+    {
+      test: "src/web-storage-manager.js",
+      sourceType: "script",
+    }
+  ]
+
+  module.exports = { presets, overrides };
