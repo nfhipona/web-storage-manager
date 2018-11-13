@@ -462,10 +462,12 @@ exports.purge = () => {
  */
 exports.encode = (obj) => {
 
+    if (!obj || typeof obj !== 'string') return null;
+
     const rawStr = JSON.stringify(obj)
     const encObj = window.btoa(rawStr)
 
-    // console.log('encoded: ', encObj)
+    console.log('encoded: ', encObj)
     return encObj
 }
 
@@ -476,9 +478,13 @@ exports.encode = (obj) => {
  */
 exports.decode = (encObj) => {
 
-    const decoded = window.atob(encObj)
-    const obj = JSON.parse(decoded)
+    if (!encObj) return null;
 
-    // console.log('decoded: ', encObj)
+    const decoded = window.atob(encObj)
+    if (!decoded) return null;
+
+    const obj = JSON.parse(decoded)
+    console.log('decoded: ', obj)
+
     return obj
 }

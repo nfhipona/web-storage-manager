@@ -9,3 +9,5 @@ babel.config.js
 
 # dependencies
 /node_modules
+
+*.sh
