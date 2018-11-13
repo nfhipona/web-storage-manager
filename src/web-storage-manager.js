@@ -462,8 +462,6 @@ exports.purge = () => {
  */
 exports.encode = (obj) => {
 
-    if (!obj || typeof obj !== 'string') return null;
-
     const rawStr = JSON.stringify(obj)
     const encObj = window.btoa(rawStr)
 
@@ -478,13 +476,16 @@ exports.encode = (obj) => {
  */
 exports.decode = (encObj) => {
 
-    if (!encObj) return null;
+    if (!encObj || typeof encObj !== 'string') return null;
 
-    const decoded = window.atob(encObj)
-    if (!decoded) return null;
+    try {
+        const decoded = window.atob(encObj)
+        const obj = JSON.parse(decoded)
 
-    const obj = JSON.parse(decoded)
-    console.log('decoded: ', obj)
-
-    return obj
+        console.log('decoded: ', obj)
+        return obj
+    }catch(error) {
+        console.log('decoded error: ', error)
+        return null
+    }
 }
