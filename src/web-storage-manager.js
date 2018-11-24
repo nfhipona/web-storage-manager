@@ -463,7 +463,9 @@ exports.purge = () => {
 exports.encode = (obj) => {
 
     const rawStr = JSON.stringify(obj)
-    const encObj = window.btoa(rawStr)
+    const encodeURI = encodeURIComponent(rawStr)
+    const unescapedURI = unescape(encodeURI)
+    const encObj = window.btoa(unescapedURI)
 
     console.log('encoded: ', encObj)
     return encObj
