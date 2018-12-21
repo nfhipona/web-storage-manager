@@ -165,7 +165,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         let tmpCollection = {}
 
-        childKeys.map(k => k.trim())
+        childKeys = childKeys.map(k => k.trim())
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
@@ -250,7 +250,7 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         let tmpCollection = {}
 
-        childKeys.map(k => k.trim())
+        childKeys = childKeys.map(k => k.trim())
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
