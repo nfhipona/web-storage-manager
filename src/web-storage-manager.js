@@ -165,11 +165,13 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         let tmpCollection = {}
 
+        childKeys.map(k => k.trim())
+
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            collection = collection[key.trim()] // map data get value from key path
-
             if (!collection) return false // terminate on key not found
+
+            collection = collection[key] // map data get value from key path
 
             if (idx === childKeys.length - 1) {
 
@@ -248,11 +250,13 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         let tmpCollection = {}
 
+        childKeys.map(k => k.trim())
+
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            collection = collection[key.trim()] // map data get value from key path
-
             if (!collection) return false // terminate on key not found
+
+            collection = collection[key] // map data get value from key path
             
             if (idx === childKeys.length - 1) {
 
