@@ -167,7 +167,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            collection = mapData(key, collection)
+            collection = collection[key] // map data get value from key path
 
             if (idx === childKeys.length - 1) {
 
@@ -192,12 +192,6 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                 // add to temp collection
                 tmpCollection[key] = collection
             }
-        }
-
-        // map data get value from key path
-        function mapData(key, collection) {
-
-            return collection[key]
         }
 
         // map data and update collection
@@ -254,7 +248,7 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            collection = mapData(key, collection)
+            collection = collection[key] // map data get value from key path
 
             if (idx === childKeys.length - 1) {
 
@@ -279,12 +273,6 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
                 // add to temp collection
                 tmpCollection[key] = collection
             }
-        }
-
-        // map data get value from key path
-        function mapData(key, collection) {
-
-            return collection[key]
         }
 
         // map data and update collection
