@@ -167,7 +167,9 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            collection = collection[key] // map data get value from key path
+            collection = collection[key.trim()] // map data get value from key path
+
+            if (!collection) return false // terminate on key not found
 
             if (idx === childKeys.length - 1) {
 
@@ -248,8 +250,10 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            collection = collection[key] // map data get value from key path
+            collection = collection[key.trim()] // map data get value from key path
 
+            if (!collection) return false // terminate on key not found
+            
             if (idx === childKeys.length - 1) {
 
                 if (!Array.isArray(collection)) { // check if type object
@@ -423,6 +427,21 @@ exports.removeMultiple = (keys) => {
         }
 
         return true
+    } catch (error) {
+        throw error
+    }
+}
+
+/**
+ *
+ * will check if there's saved data under this domain
+ * @param {string} key - key names of your saved data
+ */
+exports.hasData = (key) => {
+
+    try {
+        const data = storage.getItem(key)
+        return data
     } catch (error) {
         throw error
     }
