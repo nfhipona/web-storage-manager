@@ -100,24 +100,6 @@ exports.appendItem = (key, value) => {
 
 /**
  *
- * @param {string} key - data key
- * @param {*} value - data value
- *
- */
-exports.appendEncodeItem = (key, value) => {
-
-    try {
-        const oldData = this.getEncodeItem(key)
-        const newData = this.combineObject(value, oldData)
-
-        return this.setEncodeItem(key, newData)
-    } catch (error) {
-        throw error
-    }
-}
-
-/**
- *
  * @param {Object} object - object to combine
  * @param {Object} toObject - object to combine to
  *
@@ -154,7 +136,7 @@ exports.indexOfObject = (collection, object, attr) => {
  * @param {string} parentKey - parent data key
  * @param {string[]} childKeys - data keys - key path
  * @param {string} value - data value
- * @param {string} value - data attrib compare
+ * @param {string} attrCompare - data attrib compare
  *
  */
 exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
@@ -239,13 +221,58 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
  * @param {string} parentKey - parent data key
  * @param {string[]} childKeys - data keys - key path
  * @param {string} value - data value
- * @param {string} value - data attrib compare
+ * @param {string} attrCompare - data attrib compare
  *
  */
-exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => { // use only for encoded objects
+exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = this.getEncodeItem(parentKey)
+        let collection = this.getItem(parentKey)
+        if (!collection) return false // terminate process
+
+        childKeys = childKeys.map(k => k.trim())
+
+        // iterate through with child keys
+        for (const [idx, key] of childKeys.entries()) {
+            if (!collection) return false // terminate on key not found
+
+            collection = collection[key] // map data get value from key path
+
+            if (idx === childKeys.length - 1) {
+
+                if (!Array.isArray(collection)) { // check if type object
+                    return collection // return value
+                }else{
+                    // collection
+                    const idx = attrCompare ? this.indexOfObject(collection, value, attrCompare) : -1
+
+                    // return value
+                    if (idx >= 0) {
+                        return collection[idx]
+                    }
+                }
+
+                return null
+            }
+        }
+
+    } catch (error) {
+        throw error
+    }
+}
+
+/**
+ *
+ * @param {string} parentKey - parent data key
+ * @param {string[]} childKeys - data keys - key path
+ * @param {string} value - data value
+ * @param {string} attrCompare - data attrib compare
+ *
+ */
+exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
+
+    try {
+        let collection = this.getItem(parentKey)
         if (!collection) return false // terminate process
 
         let tmpCollection = {}
@@ -257,25 +284,24 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
             if (!collection) return false // terminate on key not found
 
             collection = collection[key] // map data get value from key path
-            
+
             if (idx === childKeys.length - 1) {
 
-                if (!Array.isArray(collection)) { // check if type object
-                    collection = value // replace with new value
-                }else{
+                if (Array.isArray(collection)) { // check if type object
+
                     // collection
                     const idx = attrCompare ? this.indexOfObject(collection, value, attrCompare) : -1
 
-                    // append or replace object at index
+                    // remove object at index
                     if (idx >= 0) {
-                        collection[idx] = value
-                    }else{
-                        collection.push(value)
+                        delete collection[idx]
+                        c = collection.filter(e => { return e ? true : false } )
+
+                        // add to temp collection
+                        tmpCollection[key] = c
                     }
                 }
 
-                // add to temp collection
-                tmpCollection[key] = collection
                 mapDataUpdate(this, tmpCollection)
             }else{
                 // add to temp collection
@@ -287,7 +313,7 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
         function mapDataUpdate(self, tmpCollection) {
 
             const objSelf = Object(self) // set self
-            const oldCollection = objSelf.getEncodeItem(parentKey) // get old collection
+            const oldCollection = objSelf.getItem(parentKey) // get old collection
             let newCollection = null
 
             for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
@@ -309,7 +335,7 @@ exports.updateEncodeItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = objSelf.combineObject(newCollection, oldCollection)
 
                     // save and update local
-                    return objSelf.setEncodeItem(parentKey, newCollection)
+                    return objSelf.setItem(parentKey, newCollection)
                 }
             }
         }
@@ -328,25 +354,14 @@ exports.getItem = (key) => {
 
     try {
         const data = storage.getItem(key)
-        return JSON.parse(data)
 
-    } catch (error) {
-        throw error
-    }
-}
-
-/**
- *
- * @param {string} key - key name of your saved data
- *
- */
-exports.getEncodeItem = (key) => {
-
-    try {
-        const data = storage.getItem(key)
-        const decoded = this.decode(data)
-
-        return decoded
+        if (data.startsWith('}') && data.endsWith('}')) {
+            return JSON.parse(data)
+        }else if (data.endsWith('==')) {
+            return this.decode(data)
+        }else{
+            return data
+        } 
 
     } catch (error) {
         throw error
@@ -369,31 +384,6 @@ exports.getMultiple = (keys) => {
 
             if (item) {
                 items.push(item)
-            }
-        }
-
-        return items
-    } catch (error) {
-        throw error
-    }
-}
-
-/**
- *
- * @param {string[]} keys - key names of your saved data
- *
- */
-exports.getEncodeMultiple = (keys) => {
-
-    try {
-        const items = []
-
-        for (const key of keys) {
-            const data = storage.getItem(key)
-            const decoded = this.decode(data)
-
-            if (decoded) {
-                items.push(decoded)
             }
         }
 
@@ -489,7 +479,7 @@ exports.encode = (obj) => {
  */
 exports.decode = (encObj) => {
 
-    if (!encObj || typeof encObj !== 'string') return null;
+    if (!encObj || typeof encObj !== 'string') return null
 
     try {
         const decoded = window.atob(encObj)
