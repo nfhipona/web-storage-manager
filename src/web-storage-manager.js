@@ -156,7 +156,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
         let collection = null
-        const data = storage.getItem(key)
+        const data = storage.getItem(parentKey)
 
         const r = this.isDataEncoded(data)
         if (r === 1) {
