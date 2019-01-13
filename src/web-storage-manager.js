@@ -137,6 +137,8 @@ exports.combineObject = (object, toObject) => {
  */
 exports.indexOfObject = (collection, object, attr) => {
 
+    if (!object) return -1;
+    
     for (let i = 0; i < collection.length; i++) {
         if (collection[i][attr] === object[attr]) {
             return i
@@ -301,7 +303,7 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
         let collection = null
-        const data = storage.getItem(key)
+        const data = storage.getItem(parentKey)
 
         const r = exports.isDataEncoded(data)
         if (r === 1) {

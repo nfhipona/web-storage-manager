@@ -134,16 +134,26 @@ export default App;
 
 ```js
 
-storage() // returns window.localStorage
-setItem(key, value)
-setMultiple(items)
-appendItem(key, value)
-updateItemInItem(parentKey, childKeys, value, attrCompare)
-getItem(key)
-getMultiple(keys)
-removeItem(key)
-removeMultiple(keys) [ 'key1', 'key2' ]
-purge() // remove all saved data under active domain
+appendItem: ƒ (key, value)
+combineObject: ƒ (object, toObject)
+decode: ƒ (encObj)
+encode: ƒ (obj)
+getItem: ƒ (key)
+getItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
+getMultiple: ƒ (keys)
+hasData: ƒ (key)
+indexOfObject: ƒ (collection, object, attr)
+isDataEncoded: ƒ (data)
+purge: ƒ () // remove all saved data under active domain
+removeItem: ƒ (key)
+removeItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
+removeMultiple: ƒ (keys)
+setEncodeItem: ƒ (key, value)
+setEncodeMultiple: ƒ (items)
+setItem: ƒ (key, value)
+setMultiple: ƒ (items)
+storage: ƒ ()
+updateItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
 
 ```
 
