@@ -29,7 +29,7 @@ exports.setItem = (key, value) => {
 exports.setEncodeItem = (key, value) => {
 
     try {
-        const encoded = this.encode(value)
+        const encoded = exports.encode(value)
         storage.setItem(key, encoded)
         return true
     } catch (error) {
@@ -70,7 +70,7 @@ exports.setEncodeMultiple = (items) => {
 
     try {
         for (const i of items) {
-            const encoded = this.encode(i.value)
+            const encoded = exports.encode(i.value)
             storage.setItem(i.key, encoded)
         }
 
@@ -90,21 +90,21 @@ exports.appendItem = (key, value) => {
 
     try {
         const data = storage.getItem(key)
-        const r = this.isDataEncoded(data)
+        const r = exports.isDataEncoded(data)
         let oldData = {}
 
         if (r === 1) {
-            collection = JSON.parse(data)
+            collection = exports.decode(data)
         }else if (r === 0) {
-            collection = this.decode(data)
+            collection = JSON.parse(data)
         }
 
-        const newData = this.combineObject(value, oldData)
+        const newData = exports.combineObject(value, oldData)
 
         if (r === 1) {
-            return this.setEncodeItem(key, newData)
+            return exports.setEncodeItem(key, newData)
         }else if (r === 0) {
-            return this.setItem(key, newData)
+            return exports.setItem(key, newData)
         }
     } catch (error) {
         throw error
@@ -159,11 +159,11 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
         let oldCollection = null // get old collection
         const data = storage.getItem(parentKey) 
 
-        const r = this.isDataEncoded(data)
+        const r = exports.isDataEncoded(data)
         if (r === 1) {
-            oldCollection = JSON.parse(data)
+            oldCollection = exports.decode(data)
         }else if (r === 0) {
-            oldCollection = this.decode(data)
+            oldCollection = JSON.parse(data)
         }
 
         if (!oldCollection) return false // terminate process
@@ -253,7 +253,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = this.getItem(parentKey)
+        let collection = exports.getItem(parentKey)
         if (!collection) return false // terminate process
 
         childKeys = childKeys.map(k => k.trim())
@@ -270,7 +270,7 @@ exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     return collection // return value
                 }else{
                     // collection
-                    const idx = attrCompare ? this.indexOfObject(collection, value, attrCompare) : -1
+                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1
 
                     // return value
                     if (idx >= 0) {
@@ -303,9 +303,9 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         const r = exports.isDataEncoded(data)
         if (r === 1) {
-            collection = JSON.parse(data)
-        }else if (r === 0) {
             collection = exports.decode(data)
+        }else if (r === 0) {
+            collection = JSON.parse(data)
         }
 
         if (!collection) return false // terminate process
@@ -393,11 +393,12 @@ exports.getItem = (key) => {
     try {
         const data = storage.getItem(key)
 
-        const r = this.isDataEncoded(data)
+        const r = exports.isDataEncoded(data)
+        
         if (r === 1) {
-            return JSON.parse(data)
+            return exports.decode(data)
         }else if (r === 0) {
-            return this.decode(data)
+            return JSON.parse(data)
         }else{
             return data
         }
@@ -414,9 +415,9 @@ exports.getItem = (key) => {
  */
 exports.isDataEncoded = (data) => {
 
-    if (data.startsWith('{') && data.endsWith('}')) {
+    if (data.endsWith('==')) {
         return 1
-    }else if (data.endsWith('==')) {
+    }else if (data.startsWith('{') && data.endsWith('}')) {
         return 0
     }else{
         return -1 // if data is null
