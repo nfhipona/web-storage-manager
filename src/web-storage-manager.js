@@ -419,7 +419,7 @@ exports.getItem = (key) => {
  */
 exports.isDataEncoded = (data) => {
 
-    if (data.endsWith('==')) {
+    if (exports.decode(data)) {
         return 1
     }else if (data.startsWith('{') && data.endsWith('}')) {
         return 0
