@@ -205,7 +205,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
         }
 
         // map data and update collection
-        const mapDataUpdate = (tmpCollection) => {
+        function mapDataUpdate(tmpCollection) {
 
             let newCollection = null
 
