@@ -91,15 +91,17 @@ exports.appendItem = (key, value) => {
     try {
         const data = storage.getItem(key)
         const r = exports.isDataEncoded(data)
-        let oldData = {}
+        let collection = {}
 
         if (r === 1) {
             collection = exports.decode(data)
         }else if (r === 0) {
             collection = JSON.parse(data)
+        }else{
+            return false
         }
 
-        const newData = exports.combineObject(value, oldData)
+        const newData = exports.combineObject(value, collection)
 
         if (r === 1) {
             return exports.setEncodeItem(key, newData)
