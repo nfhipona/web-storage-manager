@@ -89,10 +89,23 @@ exports.setEncodeMultiple = (items) => {
 exports.appendItem = (key, value) => {
 
     try {
-        const oldData = this.getItem(key)
+        const data = storage.getItem(key)
+        const r = this.isDataEncoded(data)
+        let oldData = {}
+
+        if (r === 1) {
+            collection = JSON.parse(data)
+        }else if (r === 0) {
+            collection = this.decode(data)
+        }
+        
         const newData = this.combineObject(value, oldData)
 
-        return this.setItem(key, newData)
+        if (r === 1) {
+            return this.setEncodeItem(key, newData)
+        }else if (r === 0) {
+            return this.setItem(key, newData)
+        }
     } catch (error) {
         throw error
     }
@@ -142,7 +155,16 @@ exports.indexOfObject = (collection, object, attr) => {
 exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = this.getItem(parentKey)
+        let collection = null
+        const data = storage.getItem(key)
+
+        const r = this.isDataEncoded(data)
+        if (r === 1) {
+            collection = JSON.parse(data)
+        }else if (r === 0) {
+            collection = this.decode(data)
+        }
+
         if (!collection) return false // terminate process
 
         let tmpCollection = {}
@@ -206,7 +228,11 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = objSelf.combineObject(newCollection, oldCollection)
 
                     // save and update local
-                    return objSelf.setItem(parentKey, newCollection)
+                    if (r === 1) {
+                        return objSelf.setEncodeItem(parentKey, newCollection)
+                    }else if (r === 0) {
+                        return objSelf.setItem(parentKey, newCollection)
+                    }
                 }
             }
         }
@@ -272,7 +298,16 @@ exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = this.getItem(parentKey)
+        let collection = null
+        const data = storage.getItem(key)
+
+        const r = this.isDataEncoded(data)
+        if (r === 1) {
+            collection = JSON.parse(data)
+        }else if (r === 0) {
+            collection = this.decode(data)
+        }
+
         if (!collection) return false // terminate process
 
         let tmpCollection = {}
@@ -335,7 +370,11 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = objSelf.combineObject(newCollection, oldCollection)
 
                     // save and update local
-                    return objSelf.setItem(parentKey, newCollection)
+                    if (r === 1) {
+                        return objSelf.setEncodeItem(parentKey, newCollection)
+                    }else if (r === 0) {
+                        return objSelf.setItem(parentKey, newCollection)
+                    }
                 }
             }
         }
@@ -355,16 +394,33 @@ exports.getItem = (key) => {
     try {
         const data = storage.getItem(key)
 
-        if (data.startsWith('}') && data.endsWith('}')) {
+        const r = this.isDataEncoded(data)
+        if (r === 1) {
             return JSON.parse(data)
-        }else if (data.endsWith('==')) {
+        }else if (r === 0) {
             return this.decode(data)
         }else{
             return data
-        } 
+        }
 
     } catch (error) {
         throw error
+    }
+}
+
+/**
+ *
+ * @param {object} data - data to be validated
+ *
+ */
+exports.isDataEncoded = (data) => {
+
+    if (data.startsWith('{') && data.endsWith('}')) {
+        return 1
+    }else if (data.endsWith('==')) {
+        return 0
+    }else{
+        return -1 // if data is null
     }
 }
 
