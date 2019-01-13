@@ -98,7 +98,7 @@ exports.appendItem = (key, value) => {
         }else if (r === 0) {
             collection = this.decode(data)
         }
-        
+
         const newData = this.combineObject(value, oldData)
 
         if (r === 1) {
@@ -155,18 +155,20 @@ exports.indexOfObject = (collection, object, attr) => {
 exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = null
-        const data = storage.getItem(parentKey)
+        
+        let oldCollection = null // get old collection
+        const data = storage.getItem(parentKey) 
 
         const r = this.isDataEncoded(data)
         if (r === 1) {
-            collection = JSON.parse(data)
+            oldCollection = JSON.parse(data)
         }else if (r === 0) {
-            collection = this.decode(data)
+            oldCollection = this.decode(data)
         }
 
-        if (!collection) return false // terminate process
-
+        if (!oldCollection) return false // terminate process
+        
+        let collection = oldCollection
         let tmpCollection = {}
 
         childKeys = childKeys.map(k => k.trim())
@@ -183,7 +185,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     collection = value // replace with new value
                 }else{
                     // collection
-                    const idx = attrCompare ? this.indexOfObject(collection, value, attrCompare) : -1
+                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1
 
                     // append or replace object at index
                     if (idx >= 0) {
@@ -195,7 +197,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                 // add to temp collection
                 tmpCollection[key] = collection
-                mapDataUpdate(this, tmpCollection)
+                mapDataUpdate(tmpCollection)
             }else{
                 // add to temp collection
                 tmpCollection[key] = collection
@@ -203,10 +205,8 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
         }
 
         // map data and update collection
-        function mapDataUpdate(self, tmpCollection) {
+        const mapDataUpdate = (tmpCollection) => {
 
-            const objSelf = Object(self) // set self
-            const oldCollection = objSelf.getItem(parentKey) // get old collection
             let newCollection = null
 
             for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
@@ -219,19 +219,19 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                     // update with old data + new data
                     newCollection = {
-                        [key]: objSelf.combineObject(newCollection, data)
+                        [key]: exports.combineObject(newCollection, data)
                     }
                 }
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = objSelf.combineObject(newCollection, oldCollection)
+                    newCollection = exports.combineObject(newCollection, oldCollection)
 
                     // save and update local
                     if (r === 1) {
-                        return objSelf.setEncodeItem(parentKey, newCollection)
+                        return exports.setEncodeItem(parentKey, newCollection)
                     }else if (r === 0) {
-                        return objSelf.setItem(parentKey, newCollection)
+                        return exports.setItem(parentKey, newCollection)
                     }
                 }
             }
@@ -301,11 +301,11 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
         let collection = null
         const data = storage.getItem(key)
 
-        const r = this.isDataEncoded(data)
+        const r = exports.isDataEncoded(data)
         if (r === 1) {
             collection = JSON.parse(data)
         }else if (r === 0) {
-            collection = this.decode(data)
+            collection = exports.decode(data)
         }
 
         if (!collection) return false // terminate process
@@ -325,7 +325,7 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
                 if (Array.isArray(collection)) { // check if type object
 
                     // collection
-                    const idx = attrCompare ? this.indexOfObject(collection, value, attrCompare) : -1
+                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1
 
                     // remove object at index
                     if (idx >= 0) {
@@ -337,7 +337,7 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     }
                 }
 
-                mapDataUpdate(this, tmpCollection)
+                mapDataUpdate(tmpCollection)
             }else{
                 // add to temp collection
                 tmpCollection[key] = collection
@@ -345,10 +345,9 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
         }
 
         // map data and update collection
-        function mapDataUpdate(self, tmpCollection) {
+        function mapDataUpdate(tmpCollection) {
 
-            const objSelf = Object(self) // set self
-            const oldCollection = objSelf.getItem(parentKey) // get old collection
+            const oldCollection = exports.getItem(parentKey) // get old collection
             let newCollection = null
 
             for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
@@ -361,19 +360,19 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                     // update with old data + new data
                     newCollection = {
-                        [key]: objSelf.combineObject(newCollection, data)
+                        [key]: exports.combineObject(newCollection, data)
                     }
                 }
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = objSelf.combineObject(newCollection, oldCollection)
+                    newCollection = exports.combineObject(newCollection, oldCollection)
 
                     // save and update local
                     if (r === 1) {
-                        return objSelf.setEncodeItem(parentKey, newCollection)
+                        return exports.setEncodeItem(parentKey, newCollection)
                     }else if (r === 0) {
-                        return objSelf.setItem(parentKey, newCollection)
+                        return exports.setItem(parentKey, newCollection)
                     }
                 }
             }
