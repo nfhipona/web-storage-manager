@@ -10,27 +10,11 @@ exports.storage = () => {
  * @param {*} value - data value
  *
  */
-exports.setItem = (key, value) => {
+exports.setItem = (key, value, encoded) => {
 
     try {
-        storage.setItem(key, JSON.stringify(value))
-        return true
-    } catch (error) {
-        throw error
-    }
-}
-
-/**
- *
- * @param {string} key - data key
- * @param {*} value - data value
- *
- */
-exports.setEncodeItem = (key, value) => {
-
-    try {
-        const encoded = exports.encode(value)
-        storage.setItem(key, encoded)
+        const d = encoded ? exports.encode(value) : JSON.stringify(value)
+        storage.setItem(key, d)
         return true
     } catch (error) {
         throw error
@@ -45,33 +29,12 @@ exports.setEncodeItem = (key, value) => {
  * @param {*} items[].item.value - data value
  *
  */
-exports.setMultiple = (items) => {
+exports.setMultiple = (items, encoded) => {
 
     try {
         for (const i of items) {
-            storage.setItem(i.key, JSON.stringify(i.value))
-        }
-
-        return true
-    } catch (error) {
-        throw error
-    }
-}
-
-/**
- *
- * @param {Object[]} items - collection
- * @param {Object} items[].item - item object
- * @param {string} items[].item.key - data key
- * @param {*} items[].item.value - data value
- *
- */
-exports.setEncodeMultiple = (items) => {
-
-    try {
-        for (const i of items) {
-            const encoded = exports.encode(i.value)
-            storage.setItem(i.key, encoded)
+            const d = encoded ? exports.encode(i.value) : JSON.stringify(i.value)
+            storage.setItem(i.key, d)
         }
 
         return true
