@@ -91,21 +91,15 @@ exports.appendItem = (key, value) => {
     try {
         const data = storage.getItem(key)
         const r = exports.isDataEncoded(data)
-        let collection = {}
-
-        if (r === 1) {
-            collection = exports.decode(data)
-        }else if (r === 0) {
-            collection = JSON.parse(data)
-        }else{
-            return false
-        }
+        
+        const collection = r[1]
+        if (!collection) return // return as we don't know what format the data should be saved
 
         const newData = exports.combineObject(value, collection)
 
-        if (r === 1) {
+        if (r[0] === 1) {
             return exports.setEncodeItem(key, newData)
-        }else if (r === 0) {
+        }else if (r[0] === 0) {
             return exports.setItem(key, newData)
         }
     } catch (error) {
@@ -159,20 +153,12 @@ exports.indexOfObject = (collection, object, attr) => {
 exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        
-        let oldCollection = null // get old collection
         const data = storage.getItem(parentKey) 
-
         const r = exports.isDataEncoded(data)
-        if (r === 1) {
-            oldCollection = exports.decode(data)
-        }else if (r === 0) {
-            oldCollection = JSON.parse(data)
-        }
 
-        if (!oldCollection) return false // terminate process
-        
-        let collection = oldCollection
+        let collection = r[1] // get old collection
+        if (!collection) return false // terminate process
+
         let tmpCollection = {}
 
         childKeys = childKeys.map(k => k.trim())
@@ -229,12 +215,12 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = exports.combineObject(newCollection, oldCollection)
+                    newCollection = exports.combineObject(newCollection, r[1])
 
                     // save and update local
-                    if (r === 1) {
+                    if (r[0] === 1) {
                         return exports.setEncodeItem(parentKey, newCollection)
-                    }else if (r === 0) {
+                    }else if (r[0] === 0) {
                         return exports.setItem(parentKey, newCollection)
                     }
                 }
@@ -302,16 +288,10 @@ exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = null
         const data = storage.getItem(parentKey)
-
         const r = exports.isDataEncoded(data)
-        if (r === 1) {
-            collection = exports.decode(data)
-        }else if (r === 0) {
-            collection = JSON.parse(data)
-        }
 
+        let collection = r[1]
         if (!collection) return false // terminate process
 
         let tmpCollection = {}
@@ -351,7 +331,6 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
         // map data and update collection
         function mapDataUpdate(tmpCollection) {
 
-            const oldCollection = exports.getItem(parentKey) // get old collection
             let newCollection = null
 
             for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
@@ -370,7 +349,7 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = exports.combineObject(newCollection, oldCollection)
+                    newCollection = exports.combineObject(newCollection, r[1])
 
                     // save and update local
                     if (r === 1) {
@@ -396,17 +375,9 @@ exports.getItem = (key) => {
 
     try {
         const data = storage.getItem(key)
-
         const r = exports.isDataEncoded(data)
         
-        if (r === 1) {
-            return exports.decode(data)
-        }else if (r === 0) {
-            return JSON.parse(data)
-        }else{
-            return data
-        }
-
+        return r[1]
     } catch (error) {
         throw error
     }
@@ -415,16 +386,20 @@ exports.getItem = (key) => {
 /**
  *
  * @param {object} data - data to be validated
- *
+ * @return {object[]} - [0] status, [1] data
+ * 
  */
 exports.isDataEncoded = (data) => {
 
-    if (exports.decode(data)) {
-        return 1
+    let d = exports.decode(data)
+    
+    if (d) {
+        return [1, d]
     }else if (data.startsWith('{') && data.endsWith('}')) {
-        return 0
+        d = JSON.parse(data)
+        return [0, d]
     }else{
-        return -1 // if data is null
+        return [-1, null]
     }
 }
 
@@ -440,10 +415,10 @@ exports.getMultiple = (keys) => {
 
         for (const key of keys) {
             const data = storage.getItem(key)
-            const item = JSON.parse(data)
+            const r = exports.isDataEncoded(data)
 
-            if (item) {
-                items.push(item)
+            if (r[1]) {
+                items.push(r[1])
             }
         }
 
