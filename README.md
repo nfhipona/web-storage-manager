@@ -89,19 +89,53 @@ class App extends Component {
       'targetKeyOnParent': collectionInfo // key of this
     }
 
-    Storage.setItem('test-sample', parentItem);
+    Storage.setItem('test-sample', parentItem, true);
     Storage.setItem('test-sample-for-compare', parentItem);
 
     const valueInObj = {
       id: 2,
-      value: '010',
+      value: '01220',
       description: 'test item 101'
     }
 
     const keyPaths = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis']
-    const keyPaths2 = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis2']
     Storage.updateItemInItem('test-sample', keyPaths, valueInObj, 'id')
+
+    const keyPaths2 = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis2']
     Storage.updateItemInItem('test-sample', keyPaths2, valueInObj)
+
+    const keyPaths3 = [ 'targetKeyOnParent', 'collection', 'targetObject2']
+    Storage.updateItemInItem('test-sample', keyPaths3, testItems)
+
+    const valueInObj2 = {
+      id: 1,
+      value: '015',
+      description: 'test item 151'
+    }
+    const keyPaths4 = [ 'targetKeyOnParent', 'collection', 'targetObject2']
+    Storage.updateItemInItem('test-sample', keyPaths4, valueInObj2)
+
+    // append
+    Storage.appendItem('test-sample', { new_item : { desc: 'new test item' } })
+
+    Storage.removeItemInItem('test-sample', keyPaths, valueInObj, 'id')
+
+    Storage.setItem('copy', Storage.getItem('test-sample'))
+
+    // save multiple
+    Storage.setMultiple([
+      {
+        key: 'multiple-save-1',
+        value: 'multiple-save-data-1'
+      },
+      {
+        key: 'multiple-save-2',
+        value: ['multiple-save-data-2', 'multiple-save-data-2']
+      },{
+        key: 'multiple-save-3',
+        value: { desc: 'multiple-save-data-3' }
+      }
+    ])
   }
 
   render() {
@@ -144,14 +178,12 @@ getMultiple: ƒ (keys)
 hasData: ƒ (key)
 indexOfObject: ƒ (collection, object, attr)
 isDataEncoded: ƒ (data)
-purge: ƒ () // remove all saved data under active domain
+purge: ƒ ()
 removeItem: ƒ (key)
 removeItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
 removeMultiple: ƒ (keys)
-setEncodeItem: ƒ (key, value)
-setEncodeMultiple: ƒ (items)
-setItem: ƒ (key, value)
-setMultiple: ƒ (items)
+setItem: ƒ (key, value, encoded)
+setMultiple: ƒ (items, encoded)
 storage: ƒ ()
 updateItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
 

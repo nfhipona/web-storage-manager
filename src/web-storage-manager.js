@@ -60,11 +60,7 @@ exports.appendItem = (key, value) => {
 
         const newData = exports.combineObject(value, collection)
 
-        if (r[0] === 1) {
-            return exports.setEncodeItem(key, newData)
-        }else if (r[0] === 0) {
-            return exports.setItem(key, newData)
-        }
+        return exports.setItem(key, newData, r[0] === 1)
     } catch (error) {
         throw error
     }
@@ -181,11 +177,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = exports.combineObject(newCollection, r[1])
 
                     // save and update local
-                    if (r[0] === 1) {
-                        return exports.setEncodeItem(parentKey, newCollection)
-                    }else if (r[0] === 0) {
-                        return exports.setItem(parentKey, newCollection)
-                    }
+                    return exports.setItem(parentKey, newCollection, r[0] === 1)
                 }
             }
         }
@@ -315,11 +307,7 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
                     newCollection = exports.combineObject(newCollection, r[1])
 
                     // save and update local
-                    if (r === 1) {
-                        return exports.setEncodeItem(parentKey, newCollection)
-                    }else if (r === 0) {
-                        return exports.setItem(parentKey, newCollection)
-                    }
+                    return exports.setItem(parentKey, newCollection, r[0] === 1)
                 }
             }
         }
