@@ -1,7 +1,7 @@
 const storage = window.localStorage
 
 exports.storage = () => {
-    return storage
+    return storage;
 }
 
 /**
@@ -13,11 +13,12 @@ exports.storage = () => {
 exports.setItem = (key, value, encoded) => {
 
     try {
-        const d = encoded ? exports.encode(value) : JSON.stringify(value)
-        storage.setItem(key, d)
-        return true
+        const d = encoded ? exports.encode(value) : JSON.stringify(value);
+        storage.setItem(key, d);
+
+        return true;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -33,13 +34,13 @@ exports.setMultiple = (items, encoded) => {
 
     try {
         for (const i of items) {
-            const d = encoded ? exports.encode(i.value) : JSON.stringify(i.value)
-            storage.setItem(i.key, d)
+            const d = encoded ? exports.encode(i.value) : JSON.stringify(i.value);
+            storage.setItem(i.key, d);
         }
 
-        return true
+        return true;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -52,17 +53,17 @@ exports.setMultiple = (items, encoded) => {
 exports.appendItem = (key, value) => {
 
     try {
-        const data = storage.getItem(key)
-        const r = exports.isDataEncoded(data)
-        
-        const collection = r[1]
-        if (!collection) return // return as we don't know what format the data should be saved
+        const data = storage.getItem(key);
+        const r = exports.isDataEncoded(data);
 
-        const newData = exports.combineObject(value, collection)
+        const collection = r[1];
+        if (!collection) return; // return as we don't know what format the data should be saved
 
-        return exports.setItem(key, newData, r[0] === 1)
+        const newData = exports.combineObject(value, collection);
+
+        return exports.setItem(key, newData, r[0] === 1);
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -75,10 +76,10 @@ exports.appendItem = (key, value) => {
 exports.combineObject = (object, toObject) => {
 
     for (const key in object) {
-        toObject[key] = object[key]
+        toObject[key] = object[key];
     }
 
-    return toObject
+    return toObject;
 }
 
 /**
@@ -91,14 +92,14 @@ exports.combineObject = (object, toObject) => {
 exports.indexOfObject = (collection, object, attr) => {
 
     if (!object) return -1;
-    
+
     for (let i = 0; i < collection.length; i++) {
         if (collection[i][attr] === object[attr]) {
-            return i
+            return i;
         }
     }
 
-    return -1
+    return -1;
 }
 
 /**
@@ -112,58 +113,58 @@ exports.indexOfObject = (collection, object, attr) => {
 exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        const data = storage.getItem(parentKey) 
-        const r = exports.isDataEncoded(data)
+        const data = storage.getItem(parentKey);
+        const r = exports.isDataEncoded(data);
 
-        let collection = r[1] // get old collection
-        if (!collection) return false // terminate process
+        let collection = r[1]; // get old collection
+        if (!collection) return false; // terminate process
 
-        let tmpCollection = {}
+        let tmpCollection = {};
 
-        childKeys = childKeys.map(k => k.trim())
+        childKeys = childKeys.map(k => k.trim());
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            if (!collection) return false // terminate on key not found
+            if (!collection) return false; // terminate on key not found
 
-            collection = collection[key] // map data get value from key path
+            collection = collection[key]; // map data get value from key path
 
             if (idx === childKeys.length - 1) {
 
                 if (!Array.isArray(collection)) { // check if type object
-                    collection = value // replace with new value
+                    collection = value; // replace with new value
                 }else{
                     // collection
-                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1
+                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1;
 
                     // append or replace object at index
                     if (idx >= 0) {
-                        collection[idx] = value
+                        collection[idx] = value;
                     }else{
-                        collection.push(value)
+                        collection.push(value);
                     }
                 }
 
                 // add to temp collection
-                tmpCollection[key] = collection
-                mapDataUpdate(tmpCollection)
+                tmpCollection[key] = collection;
+                mapDataUpdate(tmpCollection);
             }else{
                 // add to temp collection
-                tmpCollection[key] = collection
+                tmpCollection[key] = collection;
             }
         }
 
         // map data and update collection
         function mapDataUpdate(tmpCollection) {
 
-            let newCollection = null
+            let newCollection = null;
 
             for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
 
-                let data = tmpCollection[key]
+                let data = tmpCollection[key];
 
                 if (!newCollection) {
-                    newCollection = { [key]: data } // set initial value
+                    newCollection = { [key]: data }; // set initial value
                 }else{
 
                     // update with old data + new data
@@ -174,16 +175,16 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = exports.combineObject(newCollection, r[1])
+                    newCollection = exports.combineObject(newCollection, r[1]);
 
                     // save and update local
-                    return exports.setItem(parentKey, newCollection, r[0] === 1)
+                    return exports.setItem(parentKey, newCollection, r[0] === 1);
                 }
             }
         }
 
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -198,37 +199,37 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        let collection = exports.getItem(parentKey)
-        if (!collection) return false // terminate process
+        let collection = exports.getItem(parentKey);
+        if (!collection) return false; // terminate process
 
-        childKeys = childKeys.map(k => k.trim())
+        childKeys = childKeys.map(k => k.trim());
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            if (!collection) return false // terminate on key not found
+            if (!collection) return false; // terminate on key not found
 
-            collection = collection[key] // map data get value from key path
+            collection = collection[key]; // map data get value from key path
 
             if (idx === childKeys.length - 1) {
 
                 if (!Array.isArray(collection)) { // check if type object
-                    return collection // return value
+                    return collection; // return value
                 }else{
                     // collection
-                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1
+                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1;
 
                     // return value
                     if (idx >= 0) {
-                        return collection[idx]
+                        return collection[idx];
                     }
                 }
 
-                return null
+                return null;
             }
         }
 
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -243,57 +244,57 @@ exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
     try {
-        const data = storage.getItem(parentKey)
-        const r = exports.isDataEncoded(data)
+        const data = storage.getItem(parentKey);
+        const r = exports.isDataEncoded(data);
 
-        let collection = r[1]
-        if (!collection) return false // terminate process
+        let collection = r[1];
+        if (!collection) return false; // terminate process
 
-        let tmpCollection = {}
+        let tmpCollection = {};
 
-        childKeys = childKeys.map(k => k.trim())
+        childKeys = childKeys.map(k => k.trim());
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
-            if (!collection) return false // terminate on key not found
+            if (!collection) return false; // terminate on key not found
 
-            collection = collection[key] // map data get value from key path
+            collection = collection[key]; // map data get value from key path
 
             if (idx === childKeys.length - 1) {
 
                 if (Array.isArray(collection)) { // check if type object
 
                     // collection
-                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1
+                    const idx = attrCompare ? exports.indexOfObject(collection, value, attrCompare) : -1;
 
                     // remove object at index
                     if (idx >= 0) {
-                        delete collection[idx]
-                        c = collection.filter(e => { return e ? true : false } )
+                        delete collection[idx];
+                        c = collection.filter(e => { return e ? true : false } );
 
                         // add to temp collection
-                        tmpCollection[key] = c
+                        tmpCollection[key] = c;
                     }
                 }
 
-                mapDataUpdate(tmpCollection)
+                mapDataUpdate(tmpCollection);
             }else{
                 // add to temp collection
-                tmpCollection[key] = collection
+                tmpCollection[key] = collection;
             }
         }
 
         // map data and update collection
         function mapDataUpdate(tmpCollection) {
 
-            let newCollection = null
+            let newCollection = null;
 
             for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
 
-                let data = tmpCollection[key]
+                let data = tmpCollection[key];
 
                 if (!newCollection) {
-                    newCollection = { [key]: data } // set initial value
+                    newCollection = { [key]: data }; // set initial value
                 }else{
 
                     // update with old data + new data
@@ -304,16 +305,16 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
                 if (idx === childKeys.length - 1) {
                     // add modified data to the parent collection
-                    newCollection = exports.combineObject(newCollection, r[1])
+                    newCollection = exports.combineObject(newCollection, r[1]);
 
                     // save and update local
-                    return exports.setItem(parentKey, newCollection, r[0] === 1)
+                    return exports.setItem(parentKey, newCollection, r[0] === 1);
                 }
             }
         }
 
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -325,12 +326,12 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 exports.getItem = (key) => {
 
     try {
-        const data = storage.getItem(key)
-        const r = exports.isDataEncoded(data)
-        
-        return r[1]
+        const data = storage.getItem(key);
+        const r = exports.isDataEncoded(data);
+
+        return r[1];
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -338,19 +339,19 @@ exports.getItem = (key) => {
  *
  * @param {object} data - data to be validated
  * @return {object[]} - [0] status, [1] data
- * 
+ *
  */
 exports.isDataEncoded = (data) => {
 
-    let d = exports.decode(data)
-    
+    let d = exports.decode(data);
+
     if (d) {
-        return [1, d]
-    }else if (data.startsWith('{') && data.endsWith('}')) {
-        d = JSON.parse(data)
-        return [0, d]
+        return [1, d];
+    }else if (data && data.startsWith('{') && data.endsWith('}')) {
+        d = JSON.parse(data);
+        return [0, d];
     }else{
-        return [-1, null]
+        return [-1, null];
     }
 }
 
@@ -362,20 +363,20 @@ exports.isDataEncoded = (data) => {
 exports.getMultiple = (keys) => {
 
     try {
-        const items = []
+        const items = [];
 
         for (const key of keys) {
-            const data = storage.getItem(key)
-            const r = exports.isDataEncoded(data)
+            const data = storage.getItem(key);
+            const r = exports.isDataEncoded(data);
 
             if (r[1]) {
-                items.push(r[1])
+                items.push(r[1]);
             }
         }
 
-        return items
+        return items;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -387,10 +388,11 @@ exports.getMultiple = (keys) => {
 exports.removeItem = (key) => {
 
     try {
-        storage.removeItem(key)
-        return true
+        storage.removeItem(key);
+
+        return true;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -403,12 +405,12 @@ exports.removeMultiple = (keys) => {
 
     try {
         for (const key of keys) {
-            storage.removeItem(key)
+            storage.removeItem(key);
         }
 
-        return true
+        return true;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -420,10 +422,11 @@ exports.removeMultiple = (keys) => {
 exports.hasData = (key) => {
 
     try {
-        const data = storage.getItem(key)
-        return data
+        const data = storage.getItem(key);
+
+        return data;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -435,10 +438,11 @@ exports.hasData = (key) => {
 exports.purge = () => {
 
     try {
-        storage.clear()
-        return true
+        storage.clear();
+
+        return true;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
@@ -449,13 +453,13 @@ exports.purge = () => {
  */
 exports.encode = (obj) => {
 
-    const rawStr = JSON.stringify(obj)
-    const encodeURI = encodeURIComponent(rawStr)
-    const unescapedURI = unescape(encodeURI)
-    const encObj = window.btoa(unescapedURI)
+    const rawStr = JSON.stringify(obj);
+    const encodeURI = encodeURIComponent(rawStr);
+    const unescapedURI = unescape(encodeURI);
+    const encObj = window.btoa(unescapedURI);
 
-    console.log('encoded: ', encObj)
-    return encObj
+    // console.log('encoded: ', encObj);
+    return encObj;
 }
 
 /**
@@ -465,16 +469,18 @@ exports.encode = (obj) => {
  */
 exports.decode = (encObj) => {
 
-    if (!encObj || typeof encObj !== 'string') return null
+    if (!encObj || typeof encObj !== 'string') return null;
 
     try {
-        const decoded = window.atob(encObj)
-        const obj = JSON.parse(decoded)
+        const decoded = window.atob(encObj);
+        const obj = JSON.parse(decoded);
 
-        console.log('decoded: ', obj)
-        return obj
+        // console.log('decoded: ', obj);
+
+        return obj;
     }catch(error) {
-        console.log('decoded error: ', error)
-        return null
+        // console.log('decoded error: ', error);
+
+        return null;
     }
 }
