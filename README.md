@@ -1,8 +1,11 @@
+[![NPM version](https://badge.fury.io/js/web-storage-manager.svg)](http://badge.fury.io/js/web-storage-manager)
+
+[![NPM](https://nodei.co/npm/web-storage-manager.png?downloads=true&stars=true)](https://nodei.co/npm/web-storage-manager/)
+
+[![NPM](https://nodei.co/npm-dl/web-storage-manager.png?months=6)](https://nodei.co/npm/web-storage-manager/)
+
 # Web Storage Manager
-
-Web utility storage manager to handle save, update and data purge
-
-[npm_url]: https://www.npmjs.com/package/web-storage-manager
+[web-storage-manager](https://www.npmjs.com/package/web-storage-manager) is a web utility storage manager to handle save, update and data purge.
 
 ## Demo
 
