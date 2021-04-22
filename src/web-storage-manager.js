@@ -104,15 +104,17 @@ exports.indexOfObject = (collection, object, attr) => {
 
 /**
  *
- * @param {string} parentKey - parent data key
- * @param {string[]} childKeys - data keys - key path
+ * @param {string} keyPath - key path parentKey.childKey.key
  * @param {string} value - data value
  * @param {string} attrCompare - data attrib compare
  *
  */
-exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
+exports.updateItemInItem = (keyPath, value, attrCompare) => {
 
     try {
+        const keys = keyPath.split(".");
+        const parentKey = keys.shift();
+        
         const data = storage.getItem(parentKey);
         const r = exports.isDataEncoded(data);
 
@@ -121,7 +123,7 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         let tmpCollection = {};
 
-        childKeys = childKeys.map(k => k.trim());
+        const childKeys = keys.map(k => k.trim());
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
@@ -190,19 +192,21 @@ exports.updateItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
 /**
  *
- * @param {string} parentKey - parent data key
- * @param {string[]} childKeys - data keys - key path
+ * @param {string} keyPath - key path parentKey.childKey.key
  * @param {string} value - data value
  * @param {string} attrCompare - data attrib compare
  *
  */
-exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
+exports.getItemInItem = (keyPath, value, attrCompare) => {
 
     try {
+        const keys = keyPath.split(".");
+        const parentKey = keys.shift();
+
         let collection = exports.getItem(parentKey);
         if (!collection) return false; // terminate process
 
-        childKeys = childKeys.map(k => k.trim());
+        const childKeys = keys.map(k => k.trim());
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
@@ -235,15 +239,17 @@ exports.getItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
 /**
  *
- * @param {string} parentKey - parent data key
- * @param {string[]} childKeys - data keys - key path
+ * @param {string} keyPath - key path parentKey.childKey.key
  * @param {string} value - data value
  * @param {string} attrCompare - data attrib compare
  *
  */
-exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
+exports.removeItemInItem = (keyPath, value, attrCompare) => {
 
     try {
+        const keys = keyPath.split(".");
+        const parentKey = keys.shift();
+
         const data = storage.getItem(parentKey);
         const r = exports.isDataEncoded(data);
 
@@ -252,7 +258,7 @@ exports.removeItemInItem = (parentKey, childKeys, value, attrCompare) => {
 
         let tmpCollection = {};
 
-        childKeys = childKeys.map(k => k.trim());
+        const childKeys = keys.map(k => k.trim());
 
         // iterate through with child keys
         for (const [idx, key] of childKeys.entries()) {
