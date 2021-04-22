@@ -24,11 +24,11 @@ npm install web-storage-manager --save
 import Storage from 'web-storage-manager';
 
 // update item on key path of previously saved data
-const keyPaths = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis']
-const keyPaths2 = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis2']
+const keyPath = 'targetKeyOnParent.collection.targetObject.changethis'
+const keyPath2 = 'targetKeyOnParent.collection.targetObject.changethis2'
 
-Storage.updateItemInItem('test-sample-parent-key', keyPaths, valueInObj, 'id')
-Storage.updateItemInItem('test-sample-parent-key', keyPaths2, valueInObj)
+Storage.updateItemInItem(keyPath, valueInObj, 'id')
+Storage.updateItemInItem(keyPath2, valueInObj)
 
 // append item
 Storage.appendItem('test-sample', { new_item : { desc: 'new test item' } })
@@ -101,27 +101,27 @@ class App extends Component {
       description: 'test item 101'
     }
 
-    const keyPaths = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis']
-    Storage.updateItemInItem('test-sample', keyPaths, valueInObj, 'id')
+    const keyPath = 'targetKeyOnParent.collection.targetObject.changethis'
+    Storage.updateItemInItem(keyPath, valueInObj, 'id')
 
-    const keyPaths2 = [ 'targetKeyOnParent', 'collection', 'targetObject', 'changethis2']
-    Storage.updateItemInItem('test-sample', keyPaths2, valueInObj)
+    const keyPath2 = 'targetKeyOnParent.collection.targetObject.changethis2'
+    Storage.updateItemInItem(keyPath2, valueInObj)
 
-    const keyPaths3 = [ 'targetKeyOnParent', 'collection', 'targetObject2']
-    Storage.updateItemInItem('test-sample', keyPaths3, testItems)
+    const keyPath3 = 'targetKeyOnParent.collection.targetObject2'
+    Storage.updateItemInItem(keyPath3, testItems)
 
     const valueInObj2 = {
       id: 1,
       value: '015',
       description: 'test item 151'
     }
-    const keyPaths4 = [ 'targetKeyOnParent', 'collection', 'targetObject2']
-    Storage.updateItemInItem('test-sample', keyPaths4, valueInObj2)
+    const keyPath4 = 'targetKeyOnParent.collection.targetObject2'
+    Storage.updateItemInItem(keyPath4, valueInObj2)
 
     // append
     Storage.appendItem('test-sample', { new_item : { desc: 'new test item' } })
 
-    Storage.removeItemInItem('test-sample', keyPaths, valueInObj, 'id')
+    Storage.removeItemInItem(keyPath, valueInObj, 'id')
 
     Storage.setItem('copy', Storage.getItem('test-sample'))
 
@@ -176,19 +176,19 @@ combineObject: ƒ (object, toObject)
 decode: ƒ (encObj)
 encode: ƒ (obj)
 getItem: ƒ (key)
-getItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
+getItemInItem: ƒ (keyPath, value, attrCompare)
 getMultiple: ƒ (keys)
 hasData: ƒ (key)
 indexOfObject: ƒ (collection, object, attr)
 isDataEncoded: ƒ (data)
 purge: ƒ ()
 removeItem: ƒ (key)
-removeItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
+removeItemInItem: ƒ (keyPath, value, attrCompare)
 removeMultiple: ƒ (keys)
 setItem: ƒ (key, value, encoded)
 setMultiple: ƒ (items, encoded)
 storage: ƒ ()
-updateItemInItem: ƒ (parentKey, childKeys, value, attrCompare)
+updateItemInItem: ƒ (keyPath, value, attrCompare)
 
 ```
 
