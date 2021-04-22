@@ -101,13 +101,13 @@ class App extends Component {
       description: 'test item 101'
     }
 
-    const keyPath = 'targetKeyOnParent.collection.targetObject.changethis'
+    const keyPath = 'test-sample.targetKeyOnParent.collection.targetObject.changethis'
     Storage.updateItemInItem(keyPath, valueInObj, 'id')
 
-    const keyPath2 = 'targetKeyOnParent.collection.targetObject.changethis2'
+    const keyPath2 = 'test-sample.targetKeyOnParent.collection.targetObject.changethis2'
     Storage.updateItemInItem(keyPath2, valueInObj)
 
-    const keyPath3 = 'targetKeyOnParent.collection.targetObject2'
+    const keyPath3 = 'test-sample.targetKeyOnParent.collection.targetObject2'
     Storage.updateItemInItem(keyPath3, testItems)
 
     const valueInObj2 = {
@@ -115,7 +115,7 @@ class App extends Component {
       value: '015',
       description: 'test item 151'
     }
-    const keyPath4 = 'targetKeyOnParent.collection.targetObject2'
+    const keyPath4 = 'test-sample.targetKeyOnParent.collection.targetObject2'
     Storage.updateItemInItem(keyPath4, valueInObj2)
 
     // append
