@@ -31,6 +31,6 @@
     "@babel/preset-env": "^7.1.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0"
+    "@babel/polyfill": "^7.4.0"
   }
 }
