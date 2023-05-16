@@ -2,7 +2,7 @@
   "name": "web-storage-manager",
   "version": "1.2.0",
   "description": "Web utility storage manager to handle save, update and data purge",
-  "main": "lib/web-storage-manager.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --watch",

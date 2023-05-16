@@ -1,23 +1,23 @@
 const presets = [
-    [
-      "@babel/env",
-      {
-        targets: {
-          edge: "17",
-          firefox: "60",
-          chrome: "67",
-          safari: "11.1",
-        },
-        useBuiltIns: "usage",
-      },
-    ],
-  ];
-
-  const overrides = [
+  [
+    "@babel/env",
     {
-      test: "src/web-storage-manager.js",
-      sourceType: "script",
-    }
-  ]
+      targets: {
+        edge: "17",
+        firefox: "60",
+        chrome: "67",
+        safari: "11.1",
+      },
+      useBuiltIns: "usage",
+    },
+  ],
+];
 
-  module.exports = { presets, overrides };
+const overrides = [
+  {
+    test: "src/index.js",
+    sourceType: "script",
+  }
+]
+
+module.exports = { presets, overrides };
