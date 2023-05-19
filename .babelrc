@@ -4,7 +4,7 @@
             "@babel/preset-env",
             {
                 "useBuiltIns": "usage", // "usage" | "entry" | false, defaults to false.
-                "corejs": "3.0.0",
+                "corejs": "3",
                 "targets": {
                     "esmodules": true,
                     "node": "18.16"
