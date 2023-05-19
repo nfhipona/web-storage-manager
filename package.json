@@ -1,6 +1,6 @@
 {
   "name": "web-storage-manager",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "Web utility storage manager to handle save, update and data purge",
   "main": "lib/index.js",
   "scripts": {
