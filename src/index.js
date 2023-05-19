@@ -1,24 +1,17 @@
 const { WebStorage } = require('./storage');
 
-function createLocalStorage({ localStorage }) {
+function createLocalStorage({ localStorage } = window) {
     return new WebStorage(localStorage);
 }
 
-function createSessionStorage({ sessionStorage }) {
+function createSessionStorage({ sessionStorage } = window) {
     return new WebStorage(sessionStorage);
 }
 
 module.exports = {
     createLocalStorage,
     createSessionStorage,
+    LocalStorage: createLocalStorage(window),
+    SessionStorage: createSessionStorage(window),
     WebStorage
 };
-
-try {
-    if (window) {
-        exports.LocalStorage = createLocalStorage(window);
-        exports.SessionStorage = createSessionStorage(window);
-    }
-} catch {
-    console.log(`Window from DOM not available.`);
-}
