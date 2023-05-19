@@ -13,11 +13,34 @@
 npm install web-storage-manager --save
 ```
 
+## Imports
+
+```js
+import { LocalStorage, SessionStorage } from 'web-storage-manager';
+```
+
+or using helper
+
+```js
+import { createLocalStorage, createSessionStorage } from 'web-storage-manager';
+
+const LocalStorage = createLocalStorage(window);
+const SessionStorage = createSessionStorage(window);
+```
+
+or using the base class
+
+```js
+import { WebStorage } from 'web-storage-manager';
+
+const LocalStorage = new WebStorage(window.localStorage);
+const SessionStorage = new WebStorage(window.sessionStorage);
+```
+
 ## Usage
 
 ```js
-
-import Storage from 'web-storage-manager';
+// Storage = LocalStorage || SessionStorage
 
 // update item on key path of previously saved data
 const keyPath = 'targetKeyOnParent.collection.targetObject.changethis'
@@ -38,7 +61,10 @@ Storage.appendItem('test-sample', { new_item : { desc: 'new test item' } })
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Storage from 'web-storage-manager';
+import { LocalStorage, SessionStorage } from 'web-storage-manager';
+
+const isLocalToggle = true;
+const Storage = isLocalToggle ? LocalStorage : SessionStorage;
 
 class App extends Component {
 
