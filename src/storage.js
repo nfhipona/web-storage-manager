@@ -158,42 +158,10 @@ export class WebStorage {
 
                     // add to temp collection
                     tmpCollection[key] = collection;
-                    mapDataUpdate(tmpCollection);
+                    this.#mapDataUpdate(tmpCollection, parentKey, childKeys, r[0] === 1);
                 } else {
                     // add to temp collection
                     tmpCollection[key] = collection;
-                }
-            }
-
-            const combineObject = this.combineObject;
-            const setItem = this.setItem;
-
-            // map data and update collection
-            function mapDataUpdate(tmpCollection) {
-
-                let newCollection = null;
-
-                for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
-
-                    let data = tmpCollection[key];
-
-                    if (!newCollection) {
-                        newCollection = { [key]: data }; // set initial value
-                    } else {
-
-                        // update with old data + new data
-                        newCollection = {
-                            [key]: combineObject(newCollection, data)
-                        }
-                    }
-
-                    if (idx === childKeys.length - 1) {
-                        // add modified data to the parent collection
-                        newCollection = combineObject(newCollection, r[1]);
-
-                        // save and update local
-                        return setItem(parentKey, newCollection, r[0] === 1);
-                    }
                 }
             }
 
@@ -295,47 +263,43 @@ export class WebStorage {
                         }
                     }
 
-                    mapDataUpdate(tmpCollection);
+                    this.#mapDataUpdate(tmpCollection, parentKey, childKeys, r[0] === 1);
                 } else {
                     // add to temp collection
                     tmpCollection[key] = collection;
                 }
             }
+        } catch (error) {
+            throw error;
+        }
+    }
 
-            const combineObject = this.combineObject;
-            const setItem = this.setItem;
+    // map data and update collection
+    #mapDataUpdate(tmpCollection, parentKey, childKeys, isEncoded) {
 
-            // map data and update collection
-            function mapDataUpdate(tmpCollection) {
+        let newCollection = null;
 
-                let newCollection = null;
+        for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
 
-                for (const [idx, key] of childKeys.reverse().entries()) { // iterate from last key path first
+            let data = tmpCollection[key];
 
-                    let data = tmpCollection[key];
+            if (!newCollection) {
+                newCollection = { [key]: data }; // set initial value
+            } else {
 
-                    if (!newCollection) {
-                        newCollection = { [key]: data }; // set initial value
-                    } else {
-
-                        // update with old data + new data
-                        newCollection = {
-                            [key]: combineObject(newCollection, data)
-                        }
-                    }
-
-                    if (idx === childKeys.length - 1) {
-                        // add modified data to the parent collection
-                        newCollection = combineObject(newCollection, r[1]);
-
-                        // save and update local
-                        return setItem(parentKey, newCollection, r[0] === 1);
-                    }
+                // update with old data + new data
+                newCollection = {
+                    [key]: this.combineObject(newCollection, data)
                 }
             }
 
-        } catch (error) {
-            throw error;
+            if (idx === childKeys.length - 1) {
+                // add modified data to the parent collection
+                newCollection = this.combineObject(newCollection, r[1]);
+
+                // save and update local
+                return this.setItem(parentKey, newCollection, isEncoded);
+            }
         }
     }
 
