@@ -158,7 +158,7 @@ export class WebStorage {
 
                     // add to temp collection
                     tmpCollection[key] = collection;
-                    this.#mapDataUpdate(tmpCollection, parentKey, childKeys, r[0] === 1);
+                    this.#mapDataUpdate(tmpCollection, parentKey, childKeys, r[1], r[0] === 1);
                 } else {
                     // add to temp collection
                     tmpCollection[key] = collection;
@@ -263,7 +263,7 @@ export class WebStorage {
                         }
                     }
 
-                    this.#mapDataUpdate(tmpCollection, parentKey, childKeys, r[0] === 1);
+                    this.#mapDataUpdate(tmpCollection, parentKey, childKeys, r[1], r[0] === 1);
                 } else {
                     // add to temp collection
                     tmpCollection[key] = collection;
@@ -275,7 +275,7 @@ export class WebStorage {
     }
 
     // map data and update collection
-    #mapDataUpdate(tmpCollection, parentKey, childKeys, isEncoded) {
+    #mapDataUpdate(tmpCollection, parentKey, childKeys, sourceData, isEncoded) {
 
         let newCollection = null;
 
@@ -295,7 +295,7 @@ export class WebStorage {
 
             if (idx === childKeys.length - 1) {
                 // add modified data to the parent collection
-                newCollection = this.combineObject(newCollection, r[1]);
+                newCollection = this.combineObject(newCollection, sourceData);
 
                 // save and update local
                 return this.setItem(parentKey, newCollection, isEncoded);
