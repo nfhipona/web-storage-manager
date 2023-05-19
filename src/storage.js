@@ -4,6 +4,14 @@ export class WebStorage {
         this.#storage = storage;
     }
 
+    length() {
+        return this.#storage.length;
+    }
+
+    key(index) {
+        return this.#storage.key(index);
+    }
+
     /**
      *
      * @param {string} key - data key
@@ -280,10 +288,10 @@ export class WebStorage {
                         // remove object at index
                         if (idx >= 0) {
                             delete collection[idx];
-                            c = collection.filter(e => { return e ? true : false });
+                            const modified = collection.filter(e => { return e ? true : false });
 
                             // add to temp collection
-                            tmpCollection[key] = c;
+                            tmpCollection[key] = modified;
                         }
                     }
 
@@ -356,7 +364,7 @@ export class WebStorage {
      */
     isDataEncoded(data) {
 
-        let d = decode(data);
+        let d = this.decode(data);
 
         if (d) {
             return [1, d];
