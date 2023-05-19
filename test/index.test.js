@@ -1,5 +1,5 @@
 const { JSDOM } = require("jsdom");
-const { createLocalStorage, createSessionStorage } = require('../lib');
+const { WebStorage } = require('../lib/storage');
 
 // create virtual dom
 const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`,
@@ -20,7 +20,7 @@ test('Test local storage', function () {
   const testVal = window.localStorage.getItem('key');
   expect(testVal).toBe('test-virtual-dom');
 
-  const LocalStorage = createLocalStorage(window);
+  const LocalStorage = new WebStorage(window.localStorage);
   const isSuccess = LocalStorage.setItem('test1', 'test-value-1');
   expect(isSuccess).toBe(true);
 
@@ -41,7 +41,7 @@ test('Test session storage', function () {
   const testVal = window.sessionStorage.getItem('key');
   expect(testVal).toBe('test-virtual-dom');
 
-  const SessionStorage = createSessionStorage(window);
+  const SessionStorage = new WebStorage(window.sessionStorage);
   const isSuccess = SessionStorage.setItem('test1', 'test-value-1');
   expect(isSuccess).toBe(true);
 
