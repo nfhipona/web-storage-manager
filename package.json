@@ -3,6 +3,10 @@
   "version": "2.2.1",
   "description": "Web utility storage manager to handle save, update and data purge",
   "main": "lib/index.js",
+  "type": "commonjs",
+  "directories": {
+    "lib": "lib"
+  },
   "scripts": {
     "test": "./node_modules/.bin/babel src --out-dir lib && jest",
     "start": "webpack --watch",
