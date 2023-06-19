@@ -48,6 +48,21 @@ export class WebStore implements WebStorage {
         this.#storage.clear();
     }
 
+
+    appendItem(key: string, value: any): boolean | Error {
+        try {
+            const data = this.getItem(key);
+            if (Array.isArray(data)) {
+                data.push(value);
+            } else if (typeof data === 'object') {
+                data[key] = value;
+            }
+            return this.setItem(key, data);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     setMultipleItems(items: StorageItem[]): boolean | Error {
         try {
             for (const item of items) {
@@ -77,19 +92,149 @@ export class WebStore implements WebStorage {
         return items;
     }
 
-    appendItemInItems(key: string, value: any): boolean | Error {
-        throw new Error('Method not implemented.');
+    appendItemInItems(key: KeyPath, value: any): boolean | Error {
+        try {
+            const keyPaths: string[] = key.split(this.delimiter);
+            const parentKey = keyPaths.shift() as string;
+            const childKeys: string[] = keyPaths.map(k => k.trim());
+            const data: any = this.getItem(parentKey);
+
+            if (!data) {
+                return new Error('Key not found');
+            }
+
+            let sourceData: any = data;
+            for (const [idx, childKey] of childKeys.entries()) {
+                sourceData = sourceData[childKey];
+
+                if (!sourceData) {
+                    return new Error('Key not found or data source is in an invalid or unsupported format');
+                }
+
+                if (idx === childKey.length - 1) {
+                    if (Array.isArray(sourceData)) {
+                        sourceData.push(value);
+                    } else if (typeof sourceData === 'object' && typeof value === 'object') {
+                        sourceData = { ...sourceData, ...value };
+                    }
+                }
+            }
+
+            return this.setItem(parentKey, data);;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    updateItemInItem(key: string, value: any, attrCompare: AttributeCompare): boolean | Error {
-        throw new Error('Method not implemented.');
+    updateItemInItem(key: KeyPath, value: any, attrCompare?: AttributeCompare): boolean | Error {
+        try {
+            const keyPaths: string[] = key.split(this.delimiter);
+            const parentKey = keyPaths.shift() as string;
+            const childKeys: string[] = keyPaths.map(k => k.trim());
+            const data: any = this.getItem(parentKey);
+
+            if (!data) {
+                return new Error('Key not found');
+            }
+
+            let sourceData: any = data;
+            for (const [idx, childKey] of childKeys.entries()) {
+                sourceData = sourceData[childKey];
+
+                if (!sourceData) {
+                    return new Error('Key not found or data source is in an invalid or unsupported format');
+                }
+
+                if (idx === childKey.length - 1) {
+                    if (Array.isArray(sourceData) && attrCompare) {
+                        const foundIdx = this.#indexOfObject(sourceData, attrCompare);
+                        sourceData[foundIdx] = value;
+                    } else if (typeof sourceData === 'object' && typeof value === 'object') {
+                        sourceData = { ...sourceData, ...value };
+                    }
+                }
+            }
+
+            return this.setItem(parentKey, data);;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    removeItemInItem(key: string, value: any, attrCompare: AttributeCompare): boolean | Error {
-        throw new Error('Method not implemented.');
+    removeItemInItem(key: KeyPath, attrCompare: AttributeCompare): boolean | Error {
+        try {
+            const keyPaths: string[] = key.split(this.delimiter);
+            const parentKey = keyPaths.shift() as string;
+            const childKeys: string[] = keyPaths.map(k => k.trim());
+            const data: any = this.getItem(parentKey);
+
+            if (!data) {
+                return new Error('Key not found');
+            }
+
+            let sourceData: any = data;
+            for (const [idx, childKey] of childKeys.entries()) {
+                const sourceDataTmp = sourceData[childKey];
+
+                if (!sourceDataTmp) {
+                    return new Error('Key not found or data source is in an invalid or unsupported format');
+                }
+
+                if (idx === childKey.length - 1) {
+                    if (Array.isArray(sourceDataTmp) && attrCompare) {
+                        const foundIdx = this.#indexOfObject(sourceDataTmp, attrCompare);
+                        sourceData[childKey].splice(foundIdx, 1);
+                    } else if (typeof sourceData === 'object') {
+                        delete sourceData[childKey];
+                    }
+                } else {
+                    sourceData = sourceDataTmp;
+                }
+            }
+
+            return this.setItem(parentKey, data);;
+        } catch (error) {
+            throw error;
+        }
     }
 
-    getItemInItem(key: string) {
-        throw new Error('Method not implemented.');
+    getItemInItem(key: KeyPath): StorageValue {
+        const keyPaths: string[] = key.split(this.delimiter);
+        const parentKey = keyPaths.shift() as string;
+        const childKeys: string[] = keyPaths.map(k => k.trim());
+        const data: any = this.getItem(parentKey);
+
+        if (!data) {
+            return new Error('Key not found');
+        }
+
+        let sourceData: any = data;
+        for (const childKey of childKeys) {
+            if (!sourceData && !Array.isArray(sourceData)) {
+                sourceData = sourceData[childKey];
+            }
+        }
+        return sourceData;
+    }
+
+    /**
+     * Helpers
+     */
+
+    /**
+     *
+     * @param {Object[]} collection - collection of objects
+     * @param {Object} object - object to find index from the collection
+     * @param {string} attr - attribute of the object to compare to
+     *
+     */
+    #indexOfObject(sourceData: Record<string, any>[], attrCompare: AttributeCompare) {
+        if (!Array.isArray(sourceData)) return -1;
+        for (const [idx, data] of sourceData.entries()) {
+            if (data[attrCompare.name] === attrCompare.value) {
+                return idx;
+            }
+        }
+        return -1;
     }
 }

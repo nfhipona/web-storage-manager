@@ -7,7 +7,7 @@ export type StorageItem = { key: KeyPath, value: StorageValue };
 /**
  * Attribute compare will work for a collection of items where values match or will replace a value of the matched key for data objects.
  */
-export type AttributeCompare = { attribute: string, value: string | number };
+export type AttributeCompare = { name: string, value: string | number };
 
 export interface Storage {
     /**
@@ -52,6 +52,14 @@ export interface Storage {
 }
 
 export interface WebStorage extends Storage {
+
+    /**
+     * Append item to the data in the specified keypath.
+     * @param key target keypath
+     * @param value value to be added or appended to existing data in the specified keypath.
+     */
+    appendItem(key: KeyPath, value: StorageValue): boolean | Error;
+
     /**
      * Add multiple entries of key value pairs to the storage.
      * @param {StorageItem[]} items Items to add individually in the storage.
@@ -83,15 +91,14 @@ export interface WebStorage extends Storage {
      * @param {StorageValue} value value to set.
      * @param {AttributeCompare} attrCompare data key attribute to be updated.
      */
-    updateItemInItem(key: KeyPath, value: StorageValue, attrCompare: AttributeCompare): boolean | Error;
+    updateItemInItem(key: KeyPath, value: StorageValue, attrCompare?: AttributeCompare): boolean | Error;
 
     /**
      * Removes an item in the specified keypath.
      * @param {KeyPath} key keypath of the data.
-     * @param {StorageValue} value value to set.
      * @param {AttributeCompare} attrCompare data key attribute to be updated.
      */
-    removeItemInItem(key: KeyPath, value: StorageValue, attrCompare: AttributeCompare): boolean | Error;
+    removeItemInItem(key: KeyPath, attrCompare?: AttributeCompare): boolean | Error;
 
     /**
      * Returns data found in the specified keypath.
