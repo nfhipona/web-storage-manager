@@ -91,7 +91,7 @@ export class WebStore implements WebStorage {
     getMultipleItems(keys: KeyPath[]): StorageValue[] {
         const items: StorageValue[] = [];
         for (const key of keys) {
-            const item = this.getItem(key);
+            const item = this.getItemInItem(key);
             if (item) {
                 items.push(item);
             }
@@ -112,28 +112,30 @@ export class WebStore implements WebStorage {
 
             let sourceData: any = data;
             for (const [idx, childKey] of childKeys.entries()) {
-                sourceData = sourceData[childKey];
-
                 if (!sourceData) {
                     return new Error('Key not found or data source is in an invalid or unsupported format');
                 }
 
-                if (idx === childKey.length - 1) {
-                    if (Array.isArray(sourceData)) {
-                        sourceData.push(value);
-                    } else if (typeof sourceData === 'object' && typeof value === 'object') {
-                        sourceData[childKey] = { ...sourceData, ...value };
+                if (idx === childKeys.length - 1) {
+                    const targetItem: any = sourceData[childKey];
+                    if (Array.isArray(targetItem)) {
+                        targetItem.push(value);
+                    } else if (typeof targetItem === 'object' && typeof value === 'object') {
+                        const mergedData = { ...targetItem, ...value };
+                        sourceData[childKey] = mergedData;
                     }
+                } else {
+                    sourceData = sourceData[childKey];
                 }
             }
 
-            return this.setItem(parentKey, data);;
+            return this.setItem(parentKey, data);
         } catch (error) {
             throw error;
         }
     }
 
-    updateItemInItem(key: KeyPath, value: any, attrCompare?: AttributeCompare): boolean | Error {
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare): boolean | Error {
         try {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;
@@ -146,23 +148,25 @@ export class WebStore implements WebStorage {
 
             let sourceData: any = data;
             for (const [idx, childKey] of childKeys.entries()) {
-                sourceData = sourceData[childKey];
-
                 if (!sourceData) {
                     return new Error('Key not found or data source is in an invalid or unsupported format');
                 }
 
-                if (idx === childKey.length - 1) {
-                    if (Array.isArray(sourceData) && attrCompare) {
-                        const foundIdx = this.#indexOfObject(sourceData, attrCompare);
-                        sourceData[foundIdx] = value;
-                    } else if (typeof sourceData === 'object' && typeof value === 'object') {
-                        sourceData[childKey] = { ...sourceData, ...value };
+                if (idx === childKeys.length - 1) {
+                    const targetItem: any = sourceData[childKey];
+                    if (Array.isArray(targetItem) && attrCompare) {
+                        const foundIdx = this.#indexOfObject(targetItem, attrCompare);
+                        targetItem[foundIdx] = attrCompare.newValue;
+                    } else if (typeof targetItem === 'object' && attrCompare) {
+                        targetItem[attrCompare.name] = attrCompare.newValue;
+                        sourceData[childKey] = targetItem;
                     }
+                } else {
+                    sourceData = sourceData[childKey];
                 }
             }
 
-            return this.setItem(parentKey, data);;
+            return this.setItem(parentKey, data);
         } catch (error) {
             throw error;
         }
@@ -181,31 +185,31 @@ export class WebStore implements WebStorage {
 
             let sourceData: any = data;
             for (const [idx, childKey] of childKeys.entries()) {
-                const sourceDataTmp = sourceData[childKey];
-
-                if (!sourceDataTmp) {
+                if (!sourceData) {
                     return new Error('Key not found or data source is in an invalid or unsupported format');
                 }
 
-                if (idx === childKey.length - 1) {
-                    if (Array.isArray(sourceDataTmp) && attrCompare) {
-                        const foundIdx = this.#indexOfObject(sourceDataTmp, attrCompare);
+                if (idx === childKeys.length - 1) {
+                    const targetItem: any = sourceData[childKey];
+                    if (Array.isArray(targetItem) && attrCompare) {
+                        const foundIdx = this.#indexOfObject(targetItem, attrCompare);
                         sourceData[childKey].splice(foundIdx, 1);
-                    } else if (typeof sourceData === 'object') {
-                        delete sourceData[childKey];
+                    } else if (typeof targetItem === 'object') {
+                        delete targetItem[attrCompare.name];
+                        sourceData[childKey] = targetItem;
                     }
                 } else {
-                    sourceData = sourceDataTmp;
+                    sourceData = sourceData[childKey];
                 }
             }
 
-            return this.setItem(parentKey, data);;
+            return this.setItem(parentKey, data);
         } catch (error) {
             throw error;
         }
     }
 
-    getItemInItem(key: KeyPath): StorageValue {
+    getItemInItem(key: KeyPath, attrCompare?: AttributeCompare): StorageValue {
         const keyPaths: string[] = key.split(this.delimiter);
         const parentKey = keyPaths.shift() as string;
         const childKeys: string[] = keyPaths.map(k => k.trim());
@@ -216,11 +220,27 @@ export class WebStore implements WebStorage {
         }
 
         let sourceData: any = data;
-        for (const childKey of childKeys) {
-            if (!sourceData && !Array.isArray(sourceData)) {
+        for (const [idx, childKey] of childKeys.entries()) {
+            if (!sourceData) {
+                return new Error('Key not found or data source is in an invalid or unsupported format');
+            }
+
+            if (idx === childKeys.length - 1) {
+                const targetItem: any = sourceData[childKey];
+                if (Array.isArray(targetItem) && attrCompare) {
+                    const foundIdx = this.#indexOfObject(targetItem, attrCompare);
+                    return targetItem[foundIdx];
+                } else if (typeof targetItem === 'object') {
+                    if (attrCompare && attrCompare.name) {
+                        return targetItem[attrCompare.name];
+                    }
+                    return targetItem;
+                }
+            } else {
                 sourceData = sourceData[childKey];
             }
         }
+
         return sourceData;
     }
 
