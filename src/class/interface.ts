@@ -68,12 +68,16 @@ export interface WebStorage extends Storage {
 
     /**
      * Remove multiple entries found in the specified keypaths.
+     * Will only work on top level keypaths and will not utilize an `AttributeCompare`.
+     * Use `removeItemInItem` to utilize an `AttributeCompare`.
      * @param {KeyPath[]} keys 
      */
     removeMultipleItems(keys: KeyPath[]): void;
 
     /**
      * Returns multiple entries found in the specified keypaths.
+     * Will only work on top level keypaths and will not utilize an `AttributeCompare`.
+     * Use `getItemInItem` to utilize an `AttributeCompare`.
      * @param {KeyPath[]} keys 
      */
     getMultipleItems(keys: KeyPath[]): StorageValue[];

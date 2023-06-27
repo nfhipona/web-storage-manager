@@ -84,7 +84,7 @@ export class WebStore implements WebStorage {
 
     removeMultipleItems(keys: KeyPath[]): void {
         for (const key of keys) {
-            this.#storage.removeItem(key);
+            this.removeItemInItem(key);
         }
     }
 
@@ -172,7 +172,7 @@ export class WebStore implements WebStorage {
         }
     }
 
-    removeItemInItem(key: KeyPath, attrCompare: AttributeCompare): boolean | Error {
+    removeItemInItem(key: KeyPath, attrCompare?: AttributeCompare): boolean | Error {
         try {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;
@@ -195,8 +195,12 @@ export class WebStore implements WebStorage {
                         const foundIdx = this.#indexOfObject(targetItem, attrCompare);
                         sourceData[childKey].splice(foundIdx, 1);
                     } else if (typeof targetItem === 'object') {
-                        delete targetItem[attrCompare.name];
-                        sourceData[childKey] = targetItem;
+                        if (attrCompare && attrCompare.name) {
+                            delete targetItem[attrCompare.name];
+                            sourceData[childKey] = targetItem;
+                        } else {
+                            delete sourceData[childKey];
+                        }
                     }
                 } else {
                     sourceData = sourceData[childKey];
