@@ -1,32 +1,20 @@
 {
     "compilerOptions": {
-        // Ensure that .d.ts files are created by tsc, but not .js files
-        "declaration": true,
-        // Ensure that Babel can safely transpile files in the TypeScript project
-        "isolatedModules": true,
+        "noEmit": true,
+        "allowJs": true,
         "alwaysStrict": true,
         "module": "CommonJS",
-        // Import non-ES modules as default imports.
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "target": "ESNext",
         "noImplicitAny": true,
-        // Search under node_modules for non-relative imports.
         "moduleResolution": "node",
-        // Process & infer types from .js files.
-        "allowJs": true,
-        // Don't emit; allow Babel to transform files.
-        "noEmit": true,
-        // Enable strictest settings like strictNullChecks & noImplicitAny.
-        "strict": true,
+        "isolatedModules": true,
+        "declaration": true,
         "sourceMap": true,
-        "outDir": "build",
+        "outDir": "lib",
         "baseUrl": ".",
-        "paths": {
-            "*": [
-                "node_modules/*"
-            ]
-        }
+        "strict": true
     },
     "include": [
         "src/**/*"

@@ -5,9 +5,12 @@
             "@babel/preset-env",
             {
                 "useBuiltIns": "entry",
-                "corejs": "3.22",
+                "corejs": "3",
                 "targets": "> 0.25%, not dead"
             }
         ]
+    ],
+    "plugins": [
+        "@babel/plugin-transform-typescript"
     ]
 }
