@@ -7,7 +7,7 @@ export type StorageItem = { key: KeyPath, value: StorageValue };
 /**
  * Attribute compare will work for a collection of items where values match or will replace a value of the matched key for data objects.
  */
-export type AttributeCompare = { name: string, value: string | number, newValue: StorageValue };
+export type AttributeCompare = { name: string, value: string | number };
 
 export interface Storage {
     /**
@@ -94,7 +94,7 @@ export interface WebStorage extends Storage {
      * @param {KeyPath} key keypath of the data.
      * @param {AttributeCompare} attrCompare data key attribute to be updated.
      */
-    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare): boolean | Error;
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare, newValue: StorageValue): boolean | Error;
 
     /**
      * Removes an item in the specified keypath.

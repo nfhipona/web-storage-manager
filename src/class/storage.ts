@@ -135,7 +135,7 @@ export class WebStore implements WebStorage {
         }
     }
 
-    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare): boolean | Error {
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare, newValue: StorageValue): boolean | Error {
         try {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;
@@ -156,10 +156,12 @@ export class WebStore implements WebStorage {
                     const targetItem: any = sourceData[childKey];
                     if (Array.isArray(targetItem) && attrCompare) {
                         const foundIdx = this.#indexOfObject(targetItem, attrCompare);
-                        targetItem[foundIdx] = attrCompare.newValue;
+                        targetItem[foundIdx] = newValue;
                     } else if (typeof targetItem === 'object' && attrCompare) {
-                        targetItem[attrCompare.name] = attrCompare.newValue;
+                        targetItem[attrCompare.name] = newValue;
                         sourceData[childKey] = targetItem;
+                    } else {
+                        sourceData[childKey] = newValue;
                     }
                 } else {
                     sourceData = sourceData[childKey];
@@ -177,8 +179,13 @@ export class WebStore implements WebStorage {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;
             const childKeys: string[] = keyPaths.map(k => k.trim());
-            const data: any = this.getItem(parentKey);
 
+            if (childKeys.length === 0) {
+                this.removeItem(parentKey);
+                return true;
+            }
+
+            const data: any = this.getItem(parentKey);
             if (!data) {
                 return new Error('Key not found');
             }
@@ -194,13 +201,11 @@ export class WebStore implements WebStorage {
                     if (Array.isArray(targetItem) && attrCompare) {
                         const foundIdx = this.#indexOfObject(targetItem, attrCompare);
                         sourceData[childKey].splice(foundIdx, 1);
-                    } else if (typeof targetItem === 'object') {
-                        if (attrCompare && attrCompare.name) {
-                            delete targetItem[attrCompare.name];
-                            sourceData[childKey] = targetItem;
-                        } else {
-                            delete sourceData[childKey];
-                        }
+                    } else if (typeof targetItem === 'object' && attrCompare) {
+                        delete targetItem[attrCompare.name];
+                        sourceData[childKey] = targetItem;
+                    } else {
+                        delete sourceData[childKey];
                     }
                 } else {
                     sourceData = sourceData[childKey];
@@ -259,7 +264,7 @@ export class WebStore implements WebStorage {
      * @returns {number} index of found matching item
      */
     #indexOfObject(sourceData: Record<string, any>[], attrCompare: AttributeCompare): number {
-        if (!Array.isArray(sourceData)) return -1;
+        if (!Array.isArray(sourceData) && attrCompare && attrCompare.name && attrCompare.value) return -1;
         for (const [idx, data] of sourceData.entries()) {
             let targetValue = data[attrCompare.name];
             if (typeof attrCompare.value === 'number') { // check the type of searched value and try to compare with it's inherent type
