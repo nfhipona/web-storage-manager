@@ -1,4 +1,11 @@
-import { AttributeCompare, KeyPath, Storage, StorageItem, StorageValue, WebStorage } from './interface';
+import {
+    AttributeCompare,
+    KeyPath,
+    Storage,
+    StorageItem,
+    StorageValue,
+    WebStorage
+} from './interface';
 
 export class WebStore implements WebStorage {
     /**
