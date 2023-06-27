@@ -92,7 +92,7 @@ export class WebStore implements WebStorage {
         return items;
     }
 
-    appendItemInItems(key: KeyPath, value: any): boolean | Error {
+    appendItemInItem(key: KeyPath, value: any): boolean | Error {
         try {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;
@@ -115,7 +115,7 @@ export class WebStore implements WebStorage {
                     if (Array.isArray(sourceData)) {
                         sourceData.push(value);
                     } else if (typeof sourceData === 'object' && typeof value === 'object') {
-                        sourceData = { ...sourceData, ...value };
+                        sourceData[childKey] = { ...sourceData, ...value };
                     }
                 }
             }
@@ -150,7 +150,7 @@ export class WebStore implements WebStorage {
                         const foundIdx = this.#indexOfObject(sourceData, attrCompare);
                         sourceData[foundIdx] = value;
                     } else if (typeof sourceData === 'object' && typeof value === 'object') {
-                        sourceData = { ...sourceData, ...value };
+                        sourceData[childKey] = { ...sourceData, ...value };
                     }
                 }
             }
@@ -222,16 +222,19 @@ export class WebStore implements WebStorage {
      */
 
     /**
-     *
-     * @param {Object[]} collection - collection of objects
-     * @param {Object} object - object to find index from the collection
-     * @param {string} attr - attribute of the object to compare to
-     *
+     * Find and returns index of the target item
+     * @param {Object[]} sourceData - collection of objects
+     * @param {AttributeCompare} attrCompare - object to find index from the collection
+     * @returns {number} index of found matching item
      */
-    #indexOfObject(sourceData: Record<string, any>[], attrCompare: AttributeCompare) {
+    #indexOfObject(sourceData: Record<string, any>[], attrCompare: AttributeCompare): number {
         if (!Array.isArray(sourceData)) return -1;
         for (const [idx, data] of sourceData.entries()) {
-            if (data[attrCompare.name] === attrCompare.value) {
+            let targetValue = data[attrCompare.name];
+            if (typeof attrCompare.value === 'number') { // check the type of searched value and try to compare with it's inherent type
+                targetValue = Number(targetValue)
+            }
+            if (targetValue === attrCompare.value) {
                 return idx;
             }
         }

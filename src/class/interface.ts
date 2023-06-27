@@ -83,7 +83,7 @@ export interface WebStorage extends Storage {
      * @param {KeyPath} key keypath of the data you want to append to.
      * @param {StorageValue} value data value you want to append to.
      */
-    appendItemInItems(key: KeyPath, value: StorageValue): boolean | Error;
+    appendItemInItem(key: KeyPath, value: StorageValue): boolean | Error;
 
     /**
      * Updates an item in the specified keypath.
