@@ -75,7 +75,7 @@ export class WebStore implements WebStorage {
             const hasErrors: string[] = [];
             for (const item of items) {
                 const result = this.setItem(item.key, item.value);
-                if (result) {
+                if (!result) {
                     hasErrors.push(item.key);
                 }
             }
@@ -141,7 +141,7 @@ export class WebStore implements WebStorage {
         }
     }
 
-    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare, newValue: StorageValue): boolean | Error {
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare | null, newValue: StorageValue): boolean | Error {
         try {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;

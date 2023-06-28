@@ -94,7 +94,7 @@ export interface WebStorage extends Storage {
      * @param {KeyPath} key keypath of the data.
      * @param {AttributeCompare} attrCompare data key attribute to be updated.
      */
-    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare, newValue: StorageValue): boolean | Error;
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare | null, newValue: StorageValue): boolean | Error;
 
     /**
      * Removes an item in the specified keypath.
