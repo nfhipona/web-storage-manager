@@ -72,9 +72,15 @@ export class WebStore implements WebStorage {
 
     setMultipleItems(items: StorageItem[]): boolean | Error {
         try {
+            const hasErrors: string[] = [];
             for (const item of items) {
-                const stringified = JSON.stringify(item.value);
-                this.#storage.setItem(item.key, stringified);
+                const result = this.setItem(item.key, item.value);
+                if (result) {
+                    hasErrors.push(item.key);
+                }
+            }
+            if (hasErrors.length > 0) {
+                return Error(`Keypath with errors: ${hasErrors.join(',')}`);
             }
             return true;
         } catch (error) {
