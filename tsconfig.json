@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "noEmit": true,
+        "allowJs": true,
+        "alwaysStrict": true,
+        "module": "CommonJS",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "target": "ESNext",
+        "noImplicitAny": true,
+        "moduleResolution": "node",
+        "isolatedModules": true,
+        "declaration": true,
+        "sourceMap": true,
+        "outDir": "lib",
+        "baseUrl": ".",
+        "strict": true
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

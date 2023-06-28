@@ -1,6 +1,6 @@
 /src
 /test
-/build/EMPTY
+/build/
 /.babelrc
 /.gitignore
 /.travis.yml
