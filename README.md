@@ -3,10 +3,6 @@
 # Web Storage Manager
 [web-storage-manager](https://www.npmjs.com/package/web-storage-manager) is a web utility storage manager to handle save, update and data purge.
 
-## Demo
-
-[Demo Page](https://github.com/nferocious76/web-storage-manager-example)
-
 ## Installation
 
 ```bash
