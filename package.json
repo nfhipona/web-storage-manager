@@ -8,7 +8,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "rm -rf lib && babel src --out-dir lib && jest",
+    "test": "jest",
+    "test:build": "rm -rf lib && npm run build:js && jest",
     "build": "rm -rf lib && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"

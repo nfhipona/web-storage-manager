@@ -55,7 +55,7 @@ export class WebStore implements WebStorage {
         this.#storage.clear();
     }
 
-
+    // to be removed.
     appendItem(key: string, value: any): boolean | Error {
         try {
             const data = this.getItem(key);
@@ -239,12 +239,10 @@ export class WebStore implements WebStorage {
                 if (Array.isArray(targetItem) && attrCompare) {
                     const foundIdx = this.#indexOfObject(targetItem, attrCompare);
                     return targetItem[foundIdx];
-                } else if (typeof targetItem === 'object') {
-                    if (attrCompare && attrCompare.name) {
-                        return targetItem[attrCompare.name];
-                    }
-                    return targetItem;
+                } else if (typeof targetItem === 'object' && attrCompare) {
+                    return targetItem[attrCompare.name];
                 }
+                return targetItem;
             } else {
                 sourceData = sourceData[childKey];
             }
