@@ -196,9 +196,38 @@ test('Test `updateItemInItem` function', function () {
 });
 
 test('Test `removeItemInItem` function', function () {
+    // NOTE: reference `testObject` in `updateItemInItem` function test.
+    /**
+     *  const testObject = {
+     *      nestedKey: {
+     *          nestedKeyA: 'nestedKeyA-target-value',
+     *          nestedKeyB: {
+     *              nestedKeyC: { itemKey: 'itemKey-value', itemKey2: 'itemKey2-target-value' },
+     *              nestedKeyD: [{ id: 'id1' }, { id: 'id2' }, { id: 'id3' }, { id: 'idz' }]
+     *          }
+     *      }
+     *  };
+     */
+    const isSuccess1 = LocalStorage.removeItemInItem('testKey.nestedKey.nestedKeyA');
+    expect(isSuccess1).toBe(true);
 
+    const isSuccess2 = LocalStorage.removeItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC', { name: 'itemKey2' });
+    expect(isSuccess2).toBe(true);
+
+    const isSuccess3 = LocalStorage.removeItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyD', { name: 'id', value: 'id3' });
+    expect(isSuccess3).toBe(true);
+
+    const result1 = LocalStorage.getItemInItem('testKey.nestedKey.nestedKeyA');
+    expect(result1).toBeUndefined();
+
+    const result2 = LocalStorage.getItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC');
+    expect(result2).toMatchObject({ itemKey: 'itemKey-value', appendItemInItemAKey: 'appendItemInItemA-target-appended-updated-value' });
+
+    const result3 = LocalStorage.getItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyD');
+    expect(result3).toMatchObject([{ id: 'id1' }, { id: 'id2' }, { id: 'idz' }, { id: 'id4', value: 'appendItemInItemB-target-appended-updated-value' }]);
 });
 
-test('Test `getItemInItem` function', function () {
-
+test('Test `clear` function', function () {
+    LocalStorage.clear();
+    expect(LocalStorage.length).toBe(0);
 });
