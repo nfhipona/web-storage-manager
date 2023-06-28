@@ -55,21 +55,6 @@ export class WebStore implements WebStorage {
         this.#storage.clear();
     }
 
-    // to be removed.
-    appendItem(key: string, value: any): boolean | Error {
-        try {
-            const data = this.getItem(key);
-            if (Array.isArray(data)) {
-                data.push(value);
-            } else if (typeof data === 'object') {
-                data[key] = value;
-            }
-            return this.setItem(key, data);
-        } catch (error) {
-            throw error;
-        }
-    }
-
     setMultipleItems(items: StorageItem[]): boolean | Error {
         try {
             const hasErrors: string[] = [];
