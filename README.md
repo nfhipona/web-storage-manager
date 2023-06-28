@@ -104,6 +104,9 @@ removeMultipleItems: ƒ removeMultipleItems(keys)
 
 ```
 
+## Unit Test
+<img width="1099" alt="Screenshot 2023-06-28 at 6 12 02 PM" src="https://github.com/nferocious76/web-storage-manager/assets/8805997/66e72f6e-52ab-43d9-95ce-6ba0b0e7a077">
+
 ## Contribute
 We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
 
