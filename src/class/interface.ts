@@ -52,14 +52,6 @@ export interface Storage {
 }
 
 export interface WebStorage extends Storage {
-
-    /**
-     * Append item to the data in the specified keypath.
-     * @param key target keypath
-     * @param value value to be added or appended to existing data in the specified keypath.
-     */
-    appendItem(key: KeyPath, value: StorageValue): boolean | Error;
-
     /**
      * Add multiple entries of key value pairs to the storage.
      * @param {StorageItem[]} items Items to add individually in the storage.
@@ -94,7 +86,7 @@ export interface WebStorage extends Storage {
      * @param {KeyPath} key keypath of the data.
      * @param {AttributeCompare} attrCompare data key attribute to be updated.
      */
-    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare, newValue: StorageValue): boolean | Error;
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare | null, newValue: StorageValue): boolean | Error;
 
     /**
      * Removes an item in the specified keypath.

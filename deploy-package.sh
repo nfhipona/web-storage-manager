@@ -1,3 +1,3 @@
 #! /bin/bash
 
-git push && git push --tags && ./node_modules/.bin/babel src --out-dir lib && npm publish
+git push && git push --tags && npm run build && npm publish

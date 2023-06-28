@@ -55,26 +55,17 @@ export class WebStore implements WebStorage {
         this.#storage.clear();
     }
 
-
-    appendItem(key: string, value: any): boolean | Error {
-        try {
-            const data = this.getItem(key);
-            if (Array.isArray(data)) {
-                data.push(value);
-            } else if (typeof data === 'object') {
-                data[key] = value;
-            }
-            return this.setItem(key, data);
-        } catch (error) {
-            throw error;
-        }
-    }
-
     setMultipleItems(items: StorageItem[]): boolean | Error {
         try {
+            const hasErrors: string[] = [];
             for (const item of items) {
-                const stringified = JSON.stringify(item.value);
-                this.#storage.setItem(item.key, stringified);
+                const result = this.setItem(item.key, item.value);
+                if (!result) {
+                    hasErrors.push(item.key);
+                }
+            }
+            if (hasErrors.length > 0) {
+                return Error(`Keypath with errors: ${hasErrors.join(',')}`);
             }
             return true;
         } catch (error) {
@@ -135,7 +126,7 @@ export class WebStore implements WebStorage {
         }
     }
 
-    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare, newValue: StorageValue): boolean | Error {
+    updateItemInItem(key: KeyPath, attrCompare: AttributeCompare | null, newValue: StorageValue): boolean | Error {
         try {
             const keyPaths: string[] = key.split(this.delimiter);
             const parentKey = keyPaths.shift() as string;
@@ -239,12 +230,10 @@ export class WebStore implements WebStorage {
                 if (Array.isArray(targetItem) && attrCompare) {
                     const foundIdx = this.#indexOfObject(targetItem, attrCompare);
                     return targetItem[foundIdx];
-                } else if (typeof targetItem === 'object') {
-                    if (attrCompare && attrCompare.name) {
-                        return targetItem[attrCompare.name];
-                    }
-                    return targetItem;
+                } else if (typeof targetItem === 'object' && attrCompare) {
+                    return targetItem[attrCompare.name];
                 }
+                return targetItem;
             } else {
                 sourceData = sourceData[childKey];
             }
