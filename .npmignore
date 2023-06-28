@@ -4,6 +4,7 @@
 /.babelrc
 /.gitignore
 /.travis.yml
+/.github
 
 webpack.config.js
 babel.config.js
