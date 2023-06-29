@@ -82,6 +82,27 @@ const isSuccess = WebStorage.setItem('testKey', testObject);
 const item2 = WebStorage.getItemInItem('testKey.nestedKey.nestedKeyA');
 // expected result: nestedKeyA-target-value
 
+const result = WebStorage.getItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC');
+// expected result: { itemKey: 'itemKey-value', itemKey2: 'itemKey2-target-value' }
+
+WebStorage.appendItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC', { appendItemInItemAKey: 'appendItemInItemA-target-appended-value' });
+// expected result: { itemKey: 'itemKey-value', itemKey2: 'itemKey2-target-value', appendItemInItemAKey: 'appendItemInItemA-target-appended-value' }
+
+WebStorage.appendItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyD', { id: 'id4', value: 'appendItemInItemB-target-appended-value' });
+// expected result: [{ id: 'id1' }, { id: 'id2' }, { id: 'id3' }, { id: 'idz' }, { id: 'id4', value: 'appendItemInItemB-target-appended-value' }]
+
+WebStorage.updateItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyD', { name: 'id', value: 'id4' }, { id: 'id4', value: 'appendItemInItemB-target-appended-updated-value' });
+// expected result: [{ id: 'id1' }, { id: 'id2' }, { id: 'id3' }, { id: 'idz' }, { id: 'id4', value: 'appendItemInItemB-target-appended-updated-value' }]
+
+const result = WebStorage.getItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC', { name: 'appendItemInItemAKey' });
+// expected result: appendItemInItemA-target-appended-value
+
+const result = WebStorage.getItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyD', { name: 'id', value: 'id4' });
+// expected result: { id: 'id4', value: 'appendItemInItemB-target-appended-updated-value' }
+
+WebStorage.removeItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC', { name: 'itemKey2' });
+// expected result: { itemKey: 'itemKey-value', appendItemInItemAKey: 'appendItemInItemA-target-appended-value' }
+
 ```
 
 ## Available Functions
