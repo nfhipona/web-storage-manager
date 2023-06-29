@@ -113,7 +113,7 @@ We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](
 ### About
 
 This project was inpired by 'react-persist' that I felt lacking of the functionalities that I need that I decided to create my own on top of Storage API.
-This project has grown and had a major rebump in its version 3.
+This project has grown and had a major revamp in its version 3.
 
 ## License
 
