@@ -106,18 +106,22 @@ export interface WebStorage extends Storage {
 /**
  * Cryptor interface
  */
-export interface CryptorConfig {
+export interface CryptorOption {
     salt: string | Buffer,
-    byteLength: number,
+    keyLength: number,
     algorithm: string,
-    password: string | Buffer
+    password: string | Buffer,
+    byteLength: number // Buffer
 }
 
-export type BinaryLike = string | NodeJS.ArrayBufferView;
+export type KeyOption = string | null;
+export type ReturnOption = string | null;
 export type VectorIV = string | null;
 
 export interface CryptorModel {
-    get ivHex(): string
-    encrypt(subject: string): string
-    decrypt(encrypted: string): string
+    get settings(): CryptorOption
+    get key(): KeyOption
+    get ivHex(): KeyOption
+    encrypt(subject: string): ReturnOption
+    decrypt(encrypted: string): ReturnOption
 }

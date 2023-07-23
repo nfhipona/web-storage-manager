@@ -26,8 +26,11 @@ export class EncryptedWebStore extends WebStore {
     getItem(key: KeyPath): StorageValue {
         const stringified = this.#storage.getItem(key);
         const decoded = this.#cryptor.decrypt(stringified);
-        const converted = JSON.parse(decoded);
-        return converted;
+        if (decoded) {
+            const converted = JSON.parse(decoded);
+            return converted;
+        }
+        return null;
     }
 
     setItem(key: KeyPath, value: StorageValue): boolean | Error {

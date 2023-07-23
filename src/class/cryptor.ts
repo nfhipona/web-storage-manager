@@ -1,63 +1,89 @@
+import * as crypto from "crypto";
+import { Buffer } from 'node:buffer';
 const {
     scryptSync,
-    randomFill,
     randomFillSync,
     createCipheriv,
     createDecipheriv
-} = await import('node:crypto');
+} = crypto;
 
 import {
-    CryptorConfig,
-    BinaryLike,
+    CryptorOption,
+    KeyOption,
+    ReturnOption,
     CryptorModel,
     VectorIV
 } from './interface';
 
-export const CryptorDefaults: CryptorConfig = {
+export const CryptorDefaults: CryptorOption = {
     salt: 'salty',
-    byteLength: 64,
-    algorithm: 'aes-256-cbc',
-    password: 'encrypted-web-storage-manager'
+    keyLength: 24,
+    algorithm: 'aes-192-cbc',
+    password: 'encrypted-web-storage-manager',
+    byteLength: 16
 }
 
 export class Cryptor implements CryptorModel {
-    #options: CryptorConfig;
-    #encryptionKey: BinaryLike;
-    #vector: BinaryLike;
+    #options: CryptorOption;
+    #encryptionKey: KeyOption;
+    #vector: KeyOption;
 
-    constructor(options: CryptorConfig = CryptorDefaults, ivHex: VectorIV = null) {
+    constructor(options: CryptorOption = CryptorDefaults, ivHex: VectorIV = null) {
         this.#options = options;
-        this.#encryptionKey = '';
-        this.#vector = ivHex ? Buffer.from(ivHex, 'hex') : '';
+        this.#encryptionKey = null;
+        this.#vector = ivHex;
 
-        if (!!this.#vector) {
+        if (!ivHex) {
             this.#createKey();
         }
     }
 
     #createKey(): void {
-        const { salt, byteLength, password } = this.#options;
-        this.#encryptionKey = scryptSync(password, salt, byteLength);
-        this.#vector = randomFillSync(new Uint8Array(16));
+        const { salt, keyLength, password, byteLength } = this.#options;
+        const key = scryptSync(password, salt, keyLength);
+        this.#encryptionKey = key.toString('hex');
+        const buf = Buffer.alloc(byteLength);
+        randomFillSync(buf);
+        this.#vector = buf.toString('hex');
     }
 
-    get ivHex(): string {
-        return this.#vector.toString();
+    get settings(): CryptorOption {
+        return this.#options
     }
 
-    encrypt(subject: string): string {
-        const { algorithm } = this.#options;
-        const cipher = createCipheriv(algorithm, this.#encryptionKey, this.#vector);
-        let encrypted = cipher.update(subject, 'utf8', 'hex');
-        encrypted += cipher.final('hex');
-        return encrypted;
+    get key(): KeyOption {
+        return this.#encryptionKey;
     }
 
-    decrypt(encrypted: string): string {
-        const { algorithm } = this.#options;
-        const decipher = createDecipheriv(algorithm, this.#encryptionKey, this.#vector);
-        let decrypted = decipher.update(encrypted, 'hex', 'utf8');
-        decrypted += decipher.final('utf8');
-        return decrypted;
+    get ivHex(): KeyOption {
+        return this.#vector;
+    }
+
+    encrypt(subject: string): ReturnOption {
+        if (this.#encryptionKey && this.#vector) {
+            const { algorithm } = this.#options;
+            const key = Buffer.from(this.#encryptionKey, 'hex');
+            const iv = Buffer.from(this.#vector, 'hex');
+            const cipher = createCipheriv(algorithm, key, iv);
+            let encrypted = cipher.update(subject, 'utf8', 'hex');
+            encrypted += cipher.final('hex');
+            return encrypted;
+        }
+
+        return null;
+    }
+
+    decrypt(encrypted: string): ReturnOption {
+        if (!!encrypted && this.#encryptionKey && this.#vector) {
+            const { algorithm } = this.#options;
+            const key = Buffer.from(this.#encryptionKey, 'hex');
+            const iv = Buffer.from(this.#vector, 'hex');
+            const decipher = createDecipheriv(algorithm, key, iv);
+            let decrypted = decipher.update(encrypted, 'hex', 'utf8');
+            decrypted += decipher.final('utf8');
+            return decrypted;
+        }
+
+        return null;
     }
 }
