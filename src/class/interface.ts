@@ -102,3 +102,22 @@ export interface WebStorage extends Storage {
      */
     getItemInItem(key: KeyPath, attrCompare?: AttributeCompare): StorageValue;
 }
+
+/**
+ * Cryptor interface
+ */
+export interface CryptorConfig {
+    salt: string | Buffer,
+    byteLength: number,
+    algorithm: string,
+    password: string | Buffer
+}
+
+export type BinaryLike = string | NodeJS.ArrayBufferView;
+export type VectorIV = string | null;
+
+export interface CryptorModel {
+    get ivHex(): string
+    encrypt(subject: string): string
+    decrypt(encrypted: string): string
+}
