@@ -249,6 +249,15 @@ test('Test `removeItemInItem` function', function () {
     expect(result3).toMatchObject([{ id: 'id1' }, { id: 'id2' }, { id: 'idz' }, { id: 'id4', value: 'appendItemInItemB-target-appended-updated-value' }]);
 });
 
+test('Test `getEncryptedRawItem` and `setEncryptedRawItem` function', function () {
+    const result = WebStorage.getEncryptedRawItem('testKey');
+    console.log('Encrypted raw item: ', result);
+    expect(result).not.toBeNull();
+
+    const isSuccess = WebStorage.setItem('testKey', result);
+    expect(isSuccess).toBe(true);
+});
+
 test('Test `clear` function', function () {
     WebStorage.clear();
     expect(WebStorage.length).toBe(0);
