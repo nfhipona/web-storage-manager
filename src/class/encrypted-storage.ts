@@ -4,9 +4,10 @@ import {
     Storage
 } from './interface';
 import { WebStore } from "./storage";
+import { EncryptedWebStorage } from './interface';
 import { Cryptor } from "./cryptor";
 
-export class EncryptedWebStore extends WebStore {
+export class EncryptedWebStore extends WebStore implements EncryptedWebStorage {
     /**
      * Web store to be used for this session.
      */
@@ -38,6 +39,19 @@ export class EncryptedWebStore extends WebStore {
             const stringified = JSON.stringify(value);
             const encodedString = this.#cryptor.encrypt(stringified);
             this.#storage.setItem(key, encodedString);
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    getEncryptedRawItem(key: string) {
+        return this.#storage.getItem(key);
+    }
+
+    setEncryptedRawItem(key: string, value: any): boolean | Error {
+        try {
+            this.#storage.setItem(key, value);
             return true;
         } catch (error) {
             throw error;
