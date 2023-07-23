@@ -3,6 +3,7 @@
 # Web Storage Manager
 [web-storage-manager](https://www.npmjs.com/package/web-storage-manager) is a web utility storage manager to handle save, update and data purge.
 
+
 ## Installation
 
 ```bash
@@ -10,6 +11,7 @@
 npm i web-storage-manager --save
 
 ```
+
 
 ## Imports
 
@@ -58,6 +60,49 @@ const EncodedSessionStorage = new EncodedWebStore(window.sessionStorage, delimit
 
 ```
 
+
+#### Using `Encrypted Web Store`
+
+```js
+
+import { Cryptor, CryptorDefaults, createEncryptedLocalStorage, createEncryptedSessionStorage } from 'web-storage-manager';
+
+/*
+const CryptorDefaults = {
+    salt: 'salty',
+    keyLength: 24,
+    algorithm: 'aes-192-cbc',
+    password: 'encrypted-web-storage-manager',
+    byteLength: 16 // Buffer
+};
+*/
+const cryptor = new Cryptor(CryptorDefaults, null);
+
+const EncryptedLocalStorage = createEncryptedLocalStorage(cryptor /* window, delimiter */);
+const EncryptedSessionStorage = createEncryptedSessionStorage(cryptor /* window, delimiter */);
+
+```
+
+or using the base class
+
+```js
+import { Cryptor, CryptorDefaults, EncryptedWebStore } from 'web-storage-manager';
+
+/*
+const CryptorDefaults = {
+    salt: 'salty',
+    keyLength: 24,
+    algorithm: 'aes-192-cbc',
+    password: 'encrypted-web-storage-manager',
+    byteLength: 16 // Buffer
+};
+*/
+const cryptor = new Cryptor(CryptorDefaults, null);
+const WebStorage = new EncryptedWebStore(window.localStorage, cryptor);
+
+```
+
+
 ## Usage and Examples
 
 Please refer to test files `local.test.js` and `session.test.js` for a complete sample and usage.
@@ -105,6 +150,22 @@ WebStorage.removeItemInItem('testKey.nestedKey.nestedKeyB.nestedKeyC', { name: '
 
 ```
 
+
+#### Using `EncryptedWebStore`
+
+Please refer to test files `encrypted.test.js` for a complete sample and usage.
+
+```js
+
+const result = WebStorage.getEncryptedRawItem('testKey');
+// expected result: 97efabdb...303df5b55
+
+const isSuccess = WebStorage.setItem('testKey', result);
+// expected result: true
+
+```
+
+
 ## Available Functions
 
 ```js
@@ -125,16 +186,30 @@ removeMultipleItems: ƒ removeMultipleItems(keys)
 
 ```
 
+
+#### Using `EncryptedWebStore`
+
+```js
+
+setEncryptedRawItem: ƒ setEncryptedRawItem(key)
+getEncryptedRawItem: ƒ getEncryptedRawItem(key, value)
+
+```
+
+
 ## Unit Test
 <img width="1099" alt="Screenshot 2023-06-28 at 6 12 02 PM" src="https://github.com/nferocious76/web-storage-manager/assets/8805997/66e72f6e-52ab-43d9-95ce-6ba0b0e7a077">
+
 
 ## Contribute
 We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
 
+
 ### About
 
-This project was inpired by 'react-persist' that I felt lacking of the functionalities that I need that I decided to create my own on top of Storage API.
-This project has grown and had a major revamp in its version 3.
+`Web Storage Manager` is a wrapper built on top of Storage API.
+This project has grown and had a major revamp in its version 3. And in its version 4, support for encrypted storage is added.
+
 
 ## License
 
