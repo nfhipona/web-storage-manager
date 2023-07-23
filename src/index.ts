@@ -1,6 +1,6 @@
 import { WebStore } from './class/storage';
 import { EncodedWebStore } from './class/encoded-storage';
-import { Cryptor } from "./class/cryptor";
+import { Cryptor, CryptorDefaults } from "./class/cryptor";
 import { EncryptedWebStore } from './class/encrypted-storage';
 
 export interface Options {
@@ -16,11 +16,11 @@ function createSessionStorage({ sessionStorage }: any = window, { delimiter = '.
     return isEncoded ? new EncodedWebStore(sessionStorage, delimiter) : new WebStore(sessionStorage, delimiter);
 }
 
-function createEncryptedLocalStorage({ localStorage }: any = window, cryptor: Cryptor, delimiter = '.') {
+function createEncryptedLocalStorage(cryptor: Cryptor, { localStorage }: any = window, delimiter = '.') {
     return new EncryptedWebStore(localStorage, cryptor, delimiter);
 }
 
-function createEncryptedSessionStorage({ sessionStorage }: any = window, cryptor: Cryptor, delimiter = '.') {
+function createEncryptedSessionStorage(cryptor: Cryptor, { sessionStorage }: any = window, delimiter = '.') {
     return new EncryptedWebStore(sessionStorage, cryptor, delimiter);
 }
 
@@ -37,6 +37,7 @@ module.exports = {
 
     WebStore,
     EncodedWebStore,
+    CryptorDefaults,
     Cryptor,
     EncryptedWebStore
 };
