@@ -103,6 +103,21 @@ export interface WebStorage extends Storage {
     getItemInItem(key: KeyPath, attrCompare?: AttributeCompare): StorageValue;
 }
 
+export interface EncryptedWebStorage extends Storage {
+    /**
+     * When passed a key name, will return that key's value.
+     * @param {KeyPath} key key name.
+     */
+    getEncryptedRawItem(key: KeyPath): StorageValue;
+
+    /**
+     * When passed a key name and value, will add that key to the storage, or update that key's value if it already exists.
+     * @param {KeyPath} key A string containing the name of the key you want to create/update.
+     * @param {StorageValue} value A string containing the value you want to give the key you are creating/updating.
+     */
+    setEncryptedRawItem(key: KeyPath, value: StorageValue): boolean | Error;
+}
+
 /**
  * Cryptor interface
  */
@@ -119,9 +134,29 @@ export type ReturnOption = string | null;
 export type VectorIV = string | null;
 
 export interface CryptorModel {
+    /**
+     * Returns the cryptor's configs
+     */
     get settings(): CryptorOption
+
+    /**
+     * Returns the cryptor's generated encryption key
+     */
     get key(): KeyOption
+
+    /**
+     * Returns the cryptor's initialization vector.
+     * NOTE: This is important for decryption. Make sure you store it somewhere for reuse.
+     */
     get ivHex(): KeyOption
+
+    /**
+     * Encrypt the data and save to storage.
+     */
     encrypt(subject: string): ReturnOption
+
+    /**
+     * Returns the decrypted data from storage.
+     */
     decrypt(encrypted: string): ReturnOption
 }
