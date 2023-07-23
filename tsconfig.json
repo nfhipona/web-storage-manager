@@ -3,7 +3,7 @@
         "noEmit": true,
         "allowJs": true,
         "alwaysStrict": true,
-        "module": "CommonJS",
+        "module": "ESNext",
         "esModuleInterop": true,
         "resolveJsonModule": true,
         "target": "ESNext",
