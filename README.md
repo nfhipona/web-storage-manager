@@ -198,8 +198,14 @@ getEncryptedRawItem: ƒ getEncryptedRawItem(key, value)
 
 
 ## Unit Test
-<img width="1099" alt="Screenshot 2023-06-28 at 6 12 02 PM" src="https://github.com/nferocious76/web-storage-manager/assets/8805997/66e72f6e-52ab-43d9-95ce-6ba0b0e7a077">
 
+`Web Storage API Unit Test Result`
+
+<img width="1099" alt="Web Storage API Unit Test Result" src="https://github.com/nferocious76/web-storage-manager/assets/8805997/66e72f6e-52ab-43d9-95ce-6ba0b0e7a077">
+
+`Encrypted Storage API Unit Test Result`
+
+<img width="1471" alt="Encrypted Storage API Unit Test Result" src="https://github.com/nfhipona/web-storage-manager/assets/8805997/3eaa9e26-e6a7-48e9-b706-f54dcb070054">
 
 ## Contribute
 We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
