@@ -102,6 +102,30 @@ const WebStorage = new EncryptedWebStore(window.localStorage, cryptor);
 
 ```
 
+`NOTES:` make sure to save the value from `cryptor.ivHex` to somewhere safe for later decryption usage.
+
+```js
+import { Cryptor, CryptorDefaults, EncryptedWebStore } from 'web-storage-manager';
+
+/*
+const CryptorDefaults = {
+    salt: 'salty',
+    keyLength: 24,
+    algorithm: 'aes-192-cbc',
+    password: 'encrypted-web-storage-manager',
+    byteLength: 16 // Buffer
+};
+*/
+const oldVectorivHex = 'a17a97ab3...af31ae9';
+const cryptor = new Cryptor(CryptorDefaults, oldVectorivHex);
+const WebStorage = new EncryptedWebStore(window.localStorage, cryptor);
+
+// then... use as normal
+const result = WebStorage2.getItem('npmjs-encrypted');
+// expected result: encrypted-web-storage-manager
+
+```
+
 
 ## Usage and Examples
 

@@ -32,16 +32,21 @@ export class Cryptor implements CryptorModel {
         this.#options = options;
         this.#encryptionKey = null;
         this.#vector = ivHex;
+        this.#createKey();
 
         if (!ivHex) {
-            this.#createKey();
+            this.#createVector();
         }
     }
 
     #createKey(): void {
-        const { salt, keyLength, password, byteLength } = this.#options;
+        const { salt, keyLength, password } = this.#options;
         const key = scryptSync(password, salt, keyLength);
         this.#encryptionKey = key.toString('hex');
+    }
+
+    #createVector(): void {
+        const { byteLength } = this.#options;
         const buf = Buffer.alloc(byteLength);
         randomFillSync(buf);
         this.#vector = buf.toString('hex');

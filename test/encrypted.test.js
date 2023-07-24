@@ -45,6 +45,27 @@ test('Test `Cryptor` class', function () {
     expect(cryptor.settings).not.toBeNull();
 });
 
+test('Test `Cryptor` class initialization with old `vector` key for `decryption`', function () {
+    // Prepare reuse test
+    const isSuccess = WebStorage.setItem('npmjs-encrypted', 'encrypted-web-storage-manager');
+    expect(isSuccess).toBe(true);
+
+    /**
+     * Make sure to save `cryptor.ivHex` value to somewhere safe for later decryption of your saved data.
+     */
+    const cryptor2 = new Cryptor(CryptorDefaults, cryptor.ivHex);
+    const OldWebStorage = new EncryptedWebStore(window.localStorage, cryptor2);
+
+    const iv = Buffer.from(cryptor2.ivHex, 'hex');
+    console.log(`Saved(Old) vector '${cryptor2.ivHex}' iv:`, iv);
+
+    const resultRaw = OldWebStorage.getEncryptedRawItem('npmjs-encrypted');
+    console.log('Encrypted old item to be decrypted using saved vector key: ', resultRaw);
+
+    const result = OldWebStorage.getItem('npmjs-encrypted');
+    expect(result).toBe('encrypted-web-storage-manager');
+});
+
 test('Test Storage API primitive functions: `.setItem`, `.length`, `.key`, `.removeItem`, `.getItem`', function () {
     const isSuccess = WebStorage.setItem('toRemoveKey', 'to-remove-value');
     expect(isSuccess).toBe(true);
