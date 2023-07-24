@@ -118,10 +118,10 @@ const CryptorDefaults = {
 */
 const oldVectorivHex = 'a17a97ab3...af31ae9';
 const cryptor = new Cryptor(CryptorDefaults, oldVectorivHex);
-const WebStorage = new EncryptedWebStore(window.localStorage, cryptor);
+const OldWebStorage = new EncryptedWebStore(window.localStorage, cryptor);
 
 // then... use as normal
-const result = WebStorage2.getItem('npmjs-encrypted');
+const result = OldWebStorage.getItem('npmjs-encrypted');
 // expected result: encrypted-web-storage-manager
 
 ```
@@ -229,7 +229,7 @@ getEncryptedRawItem: ƒ getEncryptedRawItem(key, value)
 
 `Encrypted Storage API Unit Test Result`
 
-<img width="1471" alt="Encrypted Storage API Unit Test Result" src="https://github.com/nfhipona/web-storage-manager/assets/8805997/3eaa9e26-e6a7-48e9-b706-f54dcb070054">
+<img width="1471" alt="Encrypted Storage API Unit Test Result" src="https://github.com/nfhipona/web-storage-manager/assets/8805997/971b494b-f1f3-42d3-a812-eb01ecf3cf43">
 
 ## Contribute
 We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
