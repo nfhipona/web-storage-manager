@@ -54,15 +54,15 @@ test('Test `Cryptor` class initialization with old `vector` key for `decryption`
      * Make sure to save `cryptor.ivHex` value to somewhere safe for later decryption of your saved data.
      */
     const cryptor2 = new Cryptor(CryptorDefaults, cryptor.ivHex);
-    const WebStorage2 = new EncryptedWebStore(window.localStorage, cryptor2);
+    const OldWebStorage = new EncryptedWebStore(window.localStorage, cryptor2);
 
     const iv = Buffer.from(cryptor2.ivHex, 'hex');
     console.log(`Saved(Old) vector '${cryptor2.ivHex}' iv:`, iv);
 
-    const resultRaw = WebStorage.getEncryptedRawItem('npmjs-encrypted');
+    const resultRaw = OldWebStorage.getEncryptedRawItem('npmjs-encrypted');
     console.log('Encrypted old item to be decrypted using saved vector key: ', resultRaw);
 
-    const result = WebStorage2.getItem('npmjs-encrypted');
+    const result = OldWebStorage.getItem('npmjs-encrypted');
     expect(result).toBe('encrypted-web-storage-manager');
 });
 
