@@ -20,10 +20,15 @@
   },
   "keywords": [
     "react",
-    "local",
     "storage",
+    "local",
     "local storage",
-    "web storage"
+    "session",
+    "session storage",
+    "web storage",
+    "encrypted",
+    "encrypted storage",
+    "encrypted web storage"
   ],
   "author": "Neil Francis Ramirez Hipona",
   "license": "MIT",
