@@ -1,7 +1,7 @@
 {
   "name": "web-storage-manager",
   "version": "4.0.2",
-  "description": "Web utility storage manager to handle save, update and data purge",
+  "description": "Web utility storage manager for handling data encryption, save and persist, update and data purge in your local and session storage",
   "main": "lib/index.js",
   "type": "commonjs",
   "directories": {
@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nferocious76/web-storage-manager.git"
+    "url": "git+https://github.com/nfhipona/web-storage-manager.git"
   },
   "keywords": [
     "react",
@@ -30,12 +30,17 @@
     "encrypted storage",
     "encrypted web storage"
   ],
-  "author": "Neil Francis Ramirez Hipona",
+  "author": {
+    "name": "Neil Francis Ramirez Hipona",
+    "email": "github.oet1k@passmail.com",
+    "url": "https://www.npmjs.com/package/web-storage-manager"
+  },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/nferocious76/web-storage-manager/issues"
+    "url": "https://github.com/nfhipona/web-storage-manager/issues",
+    "email": "github.oet1k@passmail.com"
   },
-  "homepage": "https://github.com/nferocious76/web-storage-manager#readme",
+  "homepage": "https://github.com/nfhipona/web-storage-manager#readme",
   "devDependencies": {
     "@babel/cli": "^7.22.5",
     "@babel/core": "^7.22.5",
