@@ -225,14 +225,14 @@ getEncryptedRawItem: ƒ getEncryptedRawItem(key, value)
 
 `Web Storage API Unit Test Result`
 
-<img width="1099" alt="Web Storage API Unit Test Result" src="https://github.com/nferocious76/web-storage-manager/assets/8805997/66e72f6e-52ab-43d9-95ce-6ba0b0e7a077">
+<img width="1099" alt="Web Storage API Unit Test Result" src="https://github.com/nfhipona/web-storage-manager/assets/8805997/66e72f6e-52ab-43d9-95ce-6ba0b0e7a077">
 
 `Encrypted Storage API Unit Test Result`
 
 <img width="1471" alt="Encrypted Storage API Unit Test Result" src="https://github.com/nfhipona/web-storage-manager/assets/8805997/971b494b-f1f3-42d3-a812-eb01ecf3cf43">
 
 ## Contribute
-We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
+We would love for you to contribute to `Web Storage Manager`. See the [LICENSE](https://github.com/nfhipona/web-storage-manager/blob/master/LICENSE) file for more info.
 
 
 ### About
@@ -243,4 +243,4 @@ This project has grown and had a major revamp in its version 3. And in its versi
 
 ## License
 
-`Web Storage Manager` is available under the MIT license. See the [LICENSE](https://github.com/nferocious76/web-storage-manager/blob/master/LICENSE) file for more info.
+`Web Storage Manager` is available under the MIT license. See the [LICENSE](https://github.com/nfhipona/web-storage-manager/blob/master/LICENSE) file for more info.
