@@ -12,7 +12,8 @@
     "test:build": "rm -rf lib && npm run build:js && jest",
     "build": "rm -rf lib && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
-    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline"
+    "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
+    "publish": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",
