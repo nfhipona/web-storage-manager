@@ -36,9 +36,9 @@ const WebStorage = new EncryptedWebStore(window.localStorage, cryptor);
 test('Test `Cryptor` class', function () {
     const key = Buffer.from(cryptor.key, 'hex');
     const iv = Buffer.from(cryptor.ivHex, 'hex');
-    console.log(`Generated encryptionKey '${cryptor.key}' key:`, key);
-    console.log(`Generated vector '${cryptor.ivHex}' iv:`, iv);
-    console.log(`Cryptor Settings:`, cryptor.settings);
+    // console.log(`Generated encryptionKey '${cryptor.key}' key:`, key);
+    // console.log(`Generated vector '${cryptor.ivHex}' iv:`, iv);
+    // console.log(`Cryptor Settings:`, cryptor.settings);
 
     expect(cryptor.key).not.toBeNull();
     expect(cryptor.ivHex).not.toBeNull();
@@ -57,10 +57,10 @@ test('Test `Cryptor` class initialization with old `vector` key for `decryption`
     const OldWebStorage = new EncryptedWebStore(window.localStorage, cryptor2);
 
     const iv = Buffer.from(cryptor2.ivHex, 'hex');
-    console.log(`Saved(Old) vector '${cryptor2.ivHex}' iv:`, iv);
+    // console.log(`Saved(Old) vector '${cryptor2.ivHex}' iv:`, iv);
 
     const resultRaw = OldWebStorage.getEncryptedRawItem('npmjs-encrypted');
-    console.log('Encrypted old item to be decrypted using saved vector key: ', resultRaw);
+    // console.log('Encrypted old item to be decrypted using saved vector key: ', resultRaw);
 
     const result = OldWebStorage.getItem('npmjs-encrypted');
     expect(result).toBe('encrypted-web-storage-manager');
@@ -272,7 +272,7 @@ test('Test `removeItemInItem` function', function () {
 
 test('Test `getEncryptedRawItem` and `setEncryptedRawItem` function', function () {
     const result = WebStorage.getEncryptedRawItem('testKey');
-    console.log('Encrypted raw item: ', result);
+    // console.log('Encrypted raw item: ', result);
     expect(result).not.toBeNull();
 
     const isSuccess = WebStorage.setItem('testKey', result);

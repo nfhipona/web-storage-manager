@@ -10,6 +10,7 @@
   "scripts": {
     "test": "jest",
     "test:build": "rm -rf lib && npm run build:js && jest",
+    "test:silent-build": "rm -rf lib && npm run build:js && jest --verbose false",
     "build": "rm -rf lib && npm run build:js",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
@@ -20,7 +21,9 @@
     "url": "git+https://github.com/nfhipona/web-storage-manager.git"
   },
   "keywords": [
-    "react",
+    "reactjs",
+    "angularjs",
+    "persistent storage",
     "storage",
     "local",
     "local storage",
