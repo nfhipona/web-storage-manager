@@ -1,7 +1,8 @@
 [![NPM](https://nodei.co/npm/web-storage-manager.png?downloads=true&downloadRank=true&stars=true)](https://nodei.co/npm/web-storage-manager/)
 
 # Web Storage Manager
-[web-storage-manager](https://www.npmjs.com/package/web-storage-manager) is a web utility storage manager to handle save, update and data purge.
+
+[web-storage-manager](https://nfhipona.github.io/web-storage-manager/) is a web development utility for managing web storage to handle save, update and data purge. It has support for storage `data encryption` or just a simple storage `data encoding`. Check out the package in npm registery [here](https://www.npmjs.com/package/web-storage-manager).
 
 
 ## Installation
