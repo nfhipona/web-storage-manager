@@ -20,7 +20,9 @@
     "url": "git+https://github.com/nfhipona/web-storage-manager.git"
   },
   "keywords": [
-    "react",
+    "reactjs",
+    "angularjs",
+    "persistent storage",
     "storage",
     "local",
     "local storage",
