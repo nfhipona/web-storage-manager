@@ -1,10 +1,10 @@
 import {
     KeyPath,
     StorageValue,
-    Storage
+    Storage,
+    EncryptedWebStorage
 } from './interface';
 import { WebStore } from "./storage";
-import { EncryptedWebStorage } from './interface';
 import { Cryptor } from "./cryptor";
 
 export class EncryptedWebStore extends WebStore implements EncryptedWebStorage {
