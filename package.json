@@ -1,17 +1,18 @@
 {
   "name": "web-storage-manager",
-  "version": "4.0.4",
+  "version": "4.1.0",
   "description": "Web utility storage manager for handling data encryption, save and persist, update and data purge in your local and session storage",
   "main": "lib/index.js",
   "type": "commonjs",
+  "types": "lib/index.d.ts",
   "directories": {
     "lib": "lib"
   },
   "scripts": {
     "test": "jest",
-    "test:build": "rm -rf lib && npm run build:js && jest",
-    "test:silent-build": "rm -rf lib && npm run build:js && jest --verbose false",
-    "build": "rm -rf lib && npm run build:js",
+    "test:build": "rm -rf lib && npm run build && jest",
+    "test:silent-build": "rm -rf lib && npm run build && jest --verbose false",
+    "build": "rm -rf lib && npm run build:js && npm run build:types",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
     "publish": "npm run build && npm publish"
