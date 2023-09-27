@@ -11,7 +11,7 @@
   "scripts": {
     "test": "jest",
     "test:build": "rm -rf lib && npm run build && jest",
-    "test:silent-build": "rm -rf lib && npm run build:js && jest --verbose false",
+    "test:silent-build": "rm -rf lib && npm run build && jest --verbose false",
     "build": "rm -rf lib && npm run build:js && npm run build:types",
     "build:types": "tsc --emitDeclarationOnly",
     "build:js": "babel src --out-dir lib --extensions \".ts,.tsx\" --source-maps inline",
