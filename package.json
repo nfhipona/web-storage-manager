@@ -1,6 +1,6 @@
 {
   "name": "web-storage-manager",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Web utility storage manager for handling data encryption, save and persist, update and data purge in your local and session storage",
   "main": "lib/index.js",
   "type": "commonjs",
