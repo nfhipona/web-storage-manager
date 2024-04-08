@@ -12,7 +12,7 @@ export type AttributeCompare = {
     name: string;
     value: string | number;
 };
-export interface Storage {
+export type Storage = {
     /**
      * keypath delimeter. defaults to '.'.
      */
@@ -46,8 +46,8 @@ export interface Storage {
      * When invoked, will empty all keys out of the storage.
      */
     clear(): void;
-}
-export interface WebStorage extends Storage {
+};
+export type WebStorage = Storage & {
     /**
      * Add multiple entries of key value pairs to the storage.
      * @param {StorageItem[]} items Items to add individually in the storage.
@@ -91,8 +91,8 @@ export interface WebStorage extends Storage {
      * @param {AttributeCompare} attrCompare data key attribute to be updated.
      */
     getItemInItem(key: KeyPath, attrCompare?: AttributeCompare): StorageValue;
-}
-export interface EncryptedWebStorage extends Storage {
+};
+export type EncryptedWebStorage = Storage & {
     /**
      * When passed a key name, will return that key's value.
      * @param {KeyPath} key key name.
@@ -104,21 +104,21 @@ export interface EncryptedWebStorage extends Storage {
      * @param {StorageValue} value A string containing the value you want to give the key you are creating/updating.
      */
     setEncryptedRawItem(key: KeyPath, value: StorageValue): boolean | Error;
-}
+};
 /**
  * Cryptor interface
  */
-export interface CryptorOption {
+export type CryptorOption = {
     salt: string | Buffer;
     keyLength: number;
     algorithm: string;
     password: string | Buffer;
     byteLength: number;
-}
+};
 export type KeyOption = string | null;
 export type ReturnOption = string | null;
 export type VectorIV = string | null;
-export interface CryptorModel {
+export type CryptorModel = {
     /**
      * Returns the cryptor's configs
      */
@@ -140,4 +140,4 @@ export interface CryptorModel {
      * Returns the decrypted data from storage.
      */
     decrypt(encrypted: string): ReturnOption;
-}
+};
