@@ -1,0 +1,6 @@
+{
+    "name": "@w3b/web-storage-manager",
+    "version": "4.1.1",
+    "license": "MIT",
+    "exports": "./src/index.ts"
+}
