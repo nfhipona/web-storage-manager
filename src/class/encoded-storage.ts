@@ -20,14 +20,14 @@ export class EncodedWebStore extends WebStore {
         this.#storage = storage;
     }
 
-    getItem(key: KeyPath): StorageValue {
+    override getItem(key: KeyPath): StorageValue {
         const stringified = this.#storage.getItem(key);
         const decoded = window.atob(stringified);
         const converted = JSON.parse(decoded);
         return converted;
     }
 
-    setItem(key: KeyPath, value: StorageValue): boolean | Error {
+    override setItem(key: KeyPath, value: StorageValue): boolean | Error {
         try {
             const stringified = JSON.stringify(value);
             const encodedString = window.btoa(stringified);

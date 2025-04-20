@@ -1,5 +1,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/Storage
 
+import { Buffer } from 'node:buffer';
+
 export type KeyPath = string;
 export type StorageValue = any;
 export type StorageItem = { key: KeyPath; value: StorageValue };

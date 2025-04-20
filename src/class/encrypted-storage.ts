@@ -24,7 +24,7 @@ export class EncryptedWebStore extends WebStore implements EncryptedWebStorage {
         this.#cryptor = cryptor;
     }
 
-    getItem(key: KeyPath): StorageValue {
+    override getItem(key: KeyPath): StorageValue {
         const stringified = this.#storage.getItem(key);
         const decoded = this.#cryptor.decrypt(stringified);
         if (decoded) {
@@ -34,7 +34,7 @@ export class EncryptedWebStore extends WebStore implements EncryptedWebStorage {
         return null;
     }
 
-    setItem(key: KeyPath, value: StorageValue): boolean | Error {
+    override setItem(key: KeyPath, value: StorageValue): boolean | Error {
         try {
             const stringified = JSON.stringify(value);
             const encodedString = this.#cryptor.encrypt(stringified);
